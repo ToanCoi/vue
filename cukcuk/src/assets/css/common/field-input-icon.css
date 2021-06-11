@@ -1,0 +1,23 @@
+/* field input */
+.field-input {
+    width: calc(var(--column-width) * 4);
+    height: 40px;
+    border: 1px solid #bbb;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.field-input__icon {
+    width: 16px;
+    height: 16px;
+    background-size: 16px 16px;
+    margin: 0 8px 0 16px;
+}
+
+.field-input__input {
+    outline: none;
+    border: none;
+    flex: 1;
+}

@@ -1,0 +1,88 @@
+/* Nav bar */
+.nav-wrapper {
+    background-color: #fff;
+    height: 100%;
+    width: var(--nav-width);
+    border-right: 1px solid rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.nav-bar {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    height: 100%;
+}
+ /* Nav header */
+ .nav__header {
+     height: var(--header-height);
+     display: flex;
+     align-items: center;
+     width: 226px;
+ }
+
+ .toggle-icon {
+     background: url("../../img/toggle.png") no-repeat;
+     background-size: 24px 24px;
+     width: 24px;
+     height: 24px;
+     margin: 12px 12px 12px 16px;
+     cursor: pointer;
+ }
+
+ .logo {
+     background: url("../../img/cukcuk-logo.png") no-repeat;
+     background-size: 142px 38px;
+     width: 174px;
+     height: 38px;
+ }
+ /* Nav list */
+ .nav__list {
+     display: flex;
+     flex-direction: column;
+     width: 226px;
+ }
+
+ .nav__list-item {
+     height: 44px;
+     display: flex;
+     align-items: center;
+     cursor: pointer;
+ }
+
+ .nav__item-icon {
+     width: 52px;
+     height: 20px;
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+
+ .item__icon {
+     width: 20px;
+     height: 20px;;
+ }
+
+    /* nav-item icon */
+    .icon-dashboard {
+        background-image: url("../../icon/dashboard.png");
+        background-size: 20px 20px;
+    }
+
+    .icon-report {
+        background-image: url("../../icon/report.png");
+        background-size: 20px 20px;
+    }
+
+    .icon-setting {
+        background-image: url("../../icon/setting.png");
+        background-size: 20px 20px;
+    }
+
+    .icon-dic-employee {
+        background-image: url("../../icon/dic-employee.png");
+        background-size: 20px 20px;
+    }

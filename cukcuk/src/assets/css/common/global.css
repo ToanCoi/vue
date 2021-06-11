@@ -1,0 +1,156 @@
+:root {
+    --nav-width: 226px;
+
+    --column-width: 71px;
+
+    --gutter-width: 24px;
+
+    --pd-lr: 24px;
+
+    --header-height: 48px;
+
+    --color-regular: #454545;
+
+    --row-height: 48px;
+}
+
+::placeholder {
+    font-family: 'GoogleSans-regular';
+    font-size: 12px;
+    color: #bbb;
+}
+
+::-webkit-scrollbar{
+    width: 5px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #cdd3d6;
+    border-radius: 10px;
+}
+
+* {
+    transition: .2s;
+}
+
+
+body {
+    font-family: 'GoogleSans-regular', sans-serif;
+}
+
+a {
+    text-decoration: none;
+    color: var(--color-regular);
+}
+
+.wrapper {
+    display: flex;
+    height: calc(100vh - 16px);
+    width: 100%;
+}
+
+.main {
+    height: 100%;
+    width: calc(100% - var(--nav-width) - 1px);
+    margin-left: calc(var(--nav-width));
+}
+
+/* text */
+.text-heading, .text-title, .text-title2 {
+    font-family: 'GoogleSans-bold';
+    color: #000;
+}
+
+.text-heading {
+    font-size: 24px;
+}
+
+.text-title {
+    font-size: 20px;
+}
+
+.text-title2 {
+    font-size: 15px;
+}
+
+.text-label-input {
+    font-family: 'GoogleSans-medium';
+    font-size: 13px;
+    color: #000;
+}
+
+.text-label {
+    font-family: 'GoogleSans-regular';
+    font-size: 13px;
+    color: #454545;
+}
+
+.text-hint {
+    font-family: 'GoogleSans-regular';
+    font-size: 11px;
+    color: #bbb;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-uppercase {
+    text-transform: uppercase;
+}
+
+/* font */
+.font-bold {
+    font-family: 'GoogleSans-bold';
+}
+
+.font-regular {
+    font-family: 'GoogleSans-regular';
+}
+
+.font-medium {
+    font-family: 'GoogleSans-medium';
+}
+
+/* display */
+.d-none {
+    display: none;
+}
+
+.d-flex {
+    display: flex;
+}
+
+.d-block {
+    display: block;
+}
+
+/* opacity */
+.opacity-1 {
+    opacity: 1;
+}
+
+/* Font */
+@font-face {
+    font-family: 'GoogleSans-regular';
+    src: url("../../font/GoogleSans-Regular.otf");
+}
+
+@font-face {
+    font-family: 'GoogleSans-medium';
+    src: url("../../font/GoogleSans-Medium.otf");
+}
+
+@font-face {
+    font-family: 'GoogleSans-light';
+    src: url("../../font/GoogleSans-Light.otf");
+}
+
+@font-face {
+    font-family: 'GoogleSans-bold';
+    src: url("../../font/GoogleSans-Bold.otf");
+}

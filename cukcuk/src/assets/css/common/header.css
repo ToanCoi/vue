@@ -1,0 +1,36 @@
+.header-page {
+    background-color: #fff;
+    height: var(--header-height);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 16px 0 24px;
+ }
+ 
+ .header__name {
+     padding-left: 8px;
+ }
+ .name__text {
+     padding-right: 10px;
+ }
+
+ .header__user {
+     display: flex;
+     align-items: center;
+     justify-content: center;
+ }
+
+ .username {
+     background: url("../../icon/avatar-default.png") no-repeat;
+     background-size: 20px 20px;
+     padding-right: 16px;
+ }
+
+ .username span {
+    padding-left: 36px;
+ }
+
+ .user__menu {
+     cursor: pointer;
+ }
