@@ -2,7 +2,7 @@
     <div class="content">
         <HeaderContent v-on:openForm="openForm"/>
         <ContentUtil/>
-        <Table :customData="employeeTable"/>
+        <Table :customData="employeeTable" v-on:openForm="openForm"/>
         <Paging/>
         <Form ref="Form"/>
     </div>
@@ -38,11 +38,14 @@ export default {
                     },
                     {
                         columnName: "Giới tính",
-                        fieldName: "Gender"
+                        fieldName: "Gender",
+                        dataType: "Enum",
+                        enumName: "Gender"
                     },
                     {
                         columnName: "Ngày sinh",
-                        fieldName: "DateOfBirth"
+                        fieldName: "DateOfBirth",
+                        dataType: "Date"
                     },
                     {
                         columnName: "Điện thoại",
@@ -54,19 +57,22 @@ export default {
                     },
                     {
                         columnName: "Chức vụ",
-                        fieldName: "Position"
+                        fieldName: "PositionName"
                     },
                     {
                         columnName: "Phòng ban",
-                        fieldName: "Department"
+                        fieldName: "DepartmentName"
                     },
                     {
                         columnName: "Mức lương",
-                        fieldName: "Salary"
+                        fieldName: "Salary",
+                        dataType: "Number"
                     },
                     {
                         columnName: "Trạng thái làm việc",
-                        fieldName: "WorkStatus"
+                        fieldName: "WorkStatus",
+                        dataType: "Enum",
+                        enumName: "WorkStatus"
                     }
                 ],
                 data: employees,
@@ -74,8 +80,12 @@ export default {
         }
     },
     methods: {
-        openForm() {
-            this.$refs.Form.openForm();
+        openForm(employee) {
+            if(employee) {
+                this.$refs.Form.openForm(employee.EmployeeId);
+            } else {
+                this.$refs.Form.openForm("");
+            }
         }
     },
 }

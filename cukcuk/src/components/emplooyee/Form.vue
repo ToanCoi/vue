@@ -32,6 +32,7 @@
                 id="inputEmployeeCode"
                 FieldName="EmployeeCode"
                 Required="true"
+                v-model="this.employee.EmployeeCode"
               />
             </div>
             <div class="form-item">
@@ -45,6 +46,7 @@
                 id="inputFullName"
                 FieldName="FullName"
                 Required="true"
+                v-model="this.employee.Fullname"
               />
             </div>
           </div>
@@ -62,6 +64,7 @@
                 class="field-input"
                 placeholder=""
                 id="inputDateOfBirth"
+                v-model="this.employee.DateOfBirth"
               />
             </div>
             <div class="form-item">
@@ -81,6 +84,7 @@
                 id="inputIdentityNumber"
                 FieldName="IdentityNumber"
                 Required="true"
+                v-model="this.employee.IdentityNumber"
               />
             </div>
             <div class="form-item">
@@ -101,6 +105,7 @@
                 class="field-input"
                 placeholder=""
                 id="inputIdentityPlace"
+                v-model="this.employee.IdentityPlace"
               />
             </div>
           </div>
@@ -114,6 +119,7 @@
                 id="inputEmail"
                 FieldName="Email"
                 DataType="Email"
+                v-model="this.employee.Email"
               />
             </div>
             <div class="form-item">
@@ -126,6 +132,7 @@
                 placeholder=""
                 id="inputPhoneNumer"
                 FieldName="PhoneNumber"
+                v-model="this.employee.PhoneNumber"
               />
             </div>
           </div>
@@ -167,6 +174,7 @@
                 id="inputSalary"
                 FieldName="Salary"
                 DataType="Number"
+                v-model="this.employee.Salary"
               />
             </div>
           </div>
@@ -201,8 +209,11 @@
 </template>
 
 <script>
+import Employee from '../../model/EmployeeModel'
+
 export default {
   data() {
+      
     return {
       showForm: false,
 
@@ -229,6 +240,8 @@ export default {
         items: ["Đang làm việc", "Đang thử việc", "Đã nghỉ việc"],
         width: "3 + 16px",
       },
+
+      employee: new Employee().initData(),
     };
   },
   methods: {
@@ -236,16 +249,68 @@ export default {
      * Hàm mở form
      * NVTOAN 13/06/2021
      */
-    openForm() {
-      this.showForm = true;
+    openForm(employeeId) {
+        if(employeeId.length > 0) {
+            this.employee = this.getEmployeeById(employeeId);
+            this.genderDropdown.select = this.genderDropdown.items.indexOf(this.employee.GenderName);
+            this.departmentDropdown.select = this.departmentDropdown.items.indexOf(this.employee.DepartmentName);
+            this.positionDropdown.select = this.positionDropdown.items.indexOf(this.employee.PositionName);
+            this.workStatusDropdown.select = this.workStatusDropdown.items.indexOf(this.employee.WorkStatusName);
+        }
+        this.showForm = true;
+    },
+
+    /**
+     * Hàm lấy employee theo Id
+     * NVTOAN 13/06/2021
+     */
+    getEmployeeById(employeeId) {
+        console.log(employeeId);
+
+        return {
+                "EmployeeId": "28901f40-c75c-11eb-b7d8-42010a8c0002",
+                "EmployeeCode": "3123123",
+                "FirstName": null,
+                "LastName": null,
+                "FullName": "313231323",
+                "Gender": 0,
+                "DateOfBirth": "2021-06-09T00:00:00",
+                "PhoneNumber": "12323132",
+                "Email": "55@gmail.com",
+                "Address": "2",
+                "IdentityNumber": "7777",
+                "IdentityDate": "1970-01-01T00:00:00",
+                "IdentityPlace": "ádasd",
+                "JoinDate": null,
+                "MartialStatus": null,
+                "EducationalBackground": null,
+                "QualificationId": null,
+                "DepartmentId": null,
+                "PositionId": null,
+                "WorkStatus": 1,
+                "PersonalTaxCode": null,
+                "Salary": 12331231231,
+                "PositionCode": null,
+                "PositionName": "Giám đốc",
+                "DepartmentCode": null,
+                "DepartmentName": "Phòng nhân sự",
+                "QualificationName": null,
+                "GenderName": "Nữ",
+                "EducationalBackgroundName": null,
+                "MartialStatusName": null,
+                "CreatedDate": "2021-06-07T06:46:59",
+                "CreatedBy": null,
+                "ModifiedDate": "2021-06-08T07:39:36",
+                "ModifiedBy": null
+            };
     },
     /**
      * Hàm đóng form
      * NVTOAN 13/06/2021
      */
     closeForm() {
-      this.showForm = false;
-      this.$bus.emit("hideOverlay", false);
+        this.showForm = false;
+        this.$bus.emit("hideOverlay", false);
     },
   },
 };

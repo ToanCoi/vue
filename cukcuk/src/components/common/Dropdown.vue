@@ -57,11 +57,17 @@ export default {
       isShow: false,
       customWidth: "",
       currentSelectedItem: null,
-      selectedValue: "",
+      selectedValue: ""
     };
   },
   created() {
     this.selectedValue = this.customData.defaultValue;
+
+    //Nếu khởi tạo chọn 1 item nào đó thì chọn
+    if(this.customData.select) {
+      this.click(this.customData.select);
+    }
+
     this.customWidth =
       "calc(var(--column-width) * " + this.customData.width + " )";
   },
