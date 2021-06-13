@@ -1,13 +1,4 @@
 /* form */
-.overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.3);
-    display: block;
-    z-index: 2;
-}
-
 .form {
     position: absolute;
     top: 0;

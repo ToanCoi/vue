@@ -12,14 +12,9 @@
 </template>
 
 <script>
-import FieldInputIcon from '../common/FieldInputIcon.vue'
-import Dropdown from '../common/Dropdown.vue'
+
 
 export default {
-    components: {
-        FieldInputIcon,
-        Dropdown
-    },
     data() {
         return {
             searchBox: {
@@ -29,12 +24,12 @@ export default {
             departmentDropdown: {
                 defaultValue: "Tất cả phòng ban",
                 items: ["Phòng nhân sự", "Phòng kế toán", "Phòng kinh doanh"],
-                width: 2.5
+                width: 2.8
             },
             positionDropdown: {
                 defaultValue: "Tất cả vị trí",
                 items: ["Nhân viên", "Giám đốc", "Trưởng phòng"],
-                width: 2.5
+                width: 2.8
             }
         }
     }

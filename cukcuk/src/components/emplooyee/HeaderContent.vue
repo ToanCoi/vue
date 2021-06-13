@@ -15,6 +15,7 @@ export default {
     methods: {
         openForm() {
             this.$emit('openForm');
+            this.$bus.emit('showOverlay', true);
         }
     },
 }

@@ -1,6 +1,6 @@
 /* Content */
 .content {
-    height: calc(100% - var(--header-height) - 1px);
+    max-height: calc(100vh - var(--header-height) - 1px);
     padding: 0px 16px;
  }
 
@@ -25,7 +25,7 @@
         display: flex;
         align-items: center;
         justify-content: space-between;
-        padding-top: 8px;
+        padding: 8px 0 16px 0;
     }
 
     .util__left {
@@ -88,3 +88,20 @@
         height: calc(var(--column-width) * 2.5);
         text-align: center;
     }
+
+/* table */
+table {
+    height: calc(100% - 56px - 66px);
+    width: 100%;
+}
+tbody {
+    display: block;
+    height: calc(100vh - 56px - 49px - 56px - 66px - 49px);
+    overflow: auto;
+}
+
+thead, tbody tr {
+    display: table;
+    width: 100%;
+    table-layout: fixed;
+}

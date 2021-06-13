@@ -2,7 +2,7 @@
     <div class="nav-wrapper">
             <nav class="nav-bar" nav-type="big" id="nav-bar">
                 <div class="nav__header">
-                    <div class="toggle-icon" id="toggle-icon" toggle="toggle-icon">
+                    <div class="toggle-icon" @click="toggleNav">
                     </div>
                     <div class="logo">
                     </div>
@@ -51,7 +51,16 @@
 
 <script>
 export default {
-    
+    data() {
+        return {
+            smallNav: false
+        }
+    },
+    methods: {
+        toggleNav() {
+            this.$emit('toggleNav');
+        }
+    },
 }
 </script>
 

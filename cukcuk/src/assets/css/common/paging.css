@@ -1,0 +1,62 @@
+/* paging */
+.paging, .paging__left, .paging__center, .paging__right, .page__num  {
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.paging-item{
+    width: 40px;
+    height: 40px;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    margin-right: 16px;
+    cursor: pointer;
+}
+
+.page-direction {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    border-radius: 50%;
+}
+
+.page__num {
+    border-radius: 50%;
+    justify-content: center; 
+}
+
+.paging-icon {
+    width: 20px;
+    height: 20px;
+}
+
+.first-page__icon {
+    background: url("../../icon/btn-firstpage.svg") no-repeat;
+    background-size: 20px;
+}
+.pre-page__icon {
+    background: url("../../icon/btn-prev-page.svg") no-repeat;
+    background-size: 20px;
+}
+
+.next-page__icon {
+    background: url("../../icon/btn-next-page.svg") no-repeat;
+    background-size: 20px;
+}
+
+.last-page__icon {
+    background: url("../../icon/btn-lastpage.svg") no-repeat;
+    background-size: 20px;
+}
+
+.paging-item-hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.paging-item-select {
+    background-color: #019160;
+    color: white;
+}

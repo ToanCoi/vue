@@ -41,7 +41,6 @@
     justify-content: center;
     border-radius: 50%;
     color: #bbb;
-    display: none;
 }
 
 .dropdown__icon-unselect:hover {
@@ -78,6 +77,12 @@
 .dropdown__item-hover {
     background-color: #e9ebee;
 }
+
+.dropdown__item-selected {
+    background-color: #019160;
+    color: #fff;
+}
+
 .dropdown__item-icon {
     padding: 0px 10px;
     opacity: 0;
