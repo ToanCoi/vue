@@ -2,6 +2,11 @@
 .dropdown {
     width: calc(var(--column-width) * 2.5);
     position: relative;
+    outline: none;
+}
+
+.dropdown:focus .dropdown__btn {
+    border: 1px solid #019160;
 }
 
 .dropdown__btn {

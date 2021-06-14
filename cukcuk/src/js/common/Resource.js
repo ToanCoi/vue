@@ -4,7 +4,8 @@ var Resource = Resource || {};
 Resource.DataTypeColumn = {
     Number: "Number",
     Date: "Date",
-    Enum: "Enum"
+    Enum: "Enum",
+    Email: "Email"
 }
 
 //Giới tính

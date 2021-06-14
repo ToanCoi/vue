@@ -71,11 +71,6 @@
     padding-left: 16px;
 }   
 
-.form-item input:focus {
-    border: 1px solid #019160;
-    outline: none;
-}
-
 .form-item>.dropdown {
     margin-left: 0px;
     padding-left: 0;

@@ -12,7 +12,7 @@
       <div class="form__component">
         <div class="form__avatar"></div>
         <div class="form__avater-des text-label">
-          (Vui lòng chọn ảnh có định dạng .jpg .jpeg .png .gìf)
+          (Vui lòng chọn ảnh có định dạng .jpg .jpeg .png .gif)
         </div>
       </div>
       <div class="form__component">
@@ -21,120 +21,26 @@
             >A. Thông tin chung</span
           >
           <div class="form-row">
-            <div class="form-item">
-              <label for="inputEmployeeCode" class="text-label"
-                >Mã nhân viên (<span style="color: red">*</span>)</label
-              >
-              <input
-                type="text"
-                class="field-input"
-                placeholder=""
-                id="inputEmployeeCode"
-                FieldName="EmployeeCode"
-                Required="true"
-                v-model="this.employee.EmployeeCode"
-              />
-            </div>
-            <div class="form-item">
-              <label for="inputFullName" class="text-label"
-                >Họ và tên (<span style="color: red">*</span>)</label
-              >
-              <input
-                type="text"
-                class="field-input"
-                placeholder=""
-                id="inputFullName"
-                FieldName="FullName"
-                Required="true"
-                v-model="this.employee.Fullname"
-              />
-            </div>
+            <FieldInputLabel class="form-item" :customData="employeeCodeInput"/>
+            <FieldInputLabel class="form-item" :customData="employeeNameInput"/>
           </div>
           <div class="form-row">
-            <div class="form-item">
-              <label
-                for="inputDateOfBirth"
-                class="text-label"
-                FieldName="DateOfBirth"
-                DataType="Date"
-                >Ngày sinh</label
-              >
-              <input
-                type="date"
-                class="field-input"
-                placeholder=""
-                id="inputDateOfBirth"
-                v-model="this.employee.DateOfBirth"
-              />
-            </div>
+            <FieldInputLabel class="form-item" :customData="dateOfBirthInput"/>
             <div class="form-item">
               <label class="text-label">Giới tính</label>
-              <Dropdown :customData="genderDropdown" />
+              <Dropdown :customData="genderDropdown"/>
             </div>
           </div>
           <div class="form-row">
-            <div class="form-item">
-              <label for="inputIdentityNumber" class="text-label"
-                >Số CMTND/Căn cước (<span style="color: red">*</span>)</label
-              >
-              <input
-                type="text"
-                class="field-input"
-                placeholder=""
-                id="inputIdentityNumber"
-                FieldName="IdentityNumber"
-                Required="true"
-                v-model="this.employee.IdentityNumber"
-              />
-            </div>
-            <div class="form-item">
-              <label for="IdentityDate" class="text-label">Ngày cấp</label>
-              <input
-                type="date"
-                class="field-input"
-                placeholder=""
-                id="IdentityDate"
-              />
-            </div>
+            <FieldInputLabel class="form-item" :customData="identityNumberInput"/>
+            <FieldInputLabel class="form-item" :customData="identityDateInput"/>
           </div>
           <div class="form-row">
-            <div class="form-item">
-              <label for="inputIdentityPlace" class="text-label">Nơi cấp</label>
-              <input
-                type="text"
-                class="field-input"
-                placeholder=""
-                id="inputIdentityPlace"
-                v-model="this.employee.IdentityPlace"
-              />
-            </div>
+            <FieldInputLabel class="form-item" :customData="identityPlaceInput"/>
           </div>
           <div class="form-row">
-            <div class="form-item">
-              <label for="inputEmail" class="text-label">Email</label>
-              <input
-                type="email"
-                class="field-input"
-                placeholder=""
-                id="inputEmail"
-                FieldName="Email"
-                DataType="Email"
-                v-model="this.employee.Email"
-              />
-            </div>
-            <div class="form-item">
-              <label for="inputPhoneNumer" class="text-label"
-                >Số điện thoại</label
-              >
-              <input
-                type="text"
-                class="field-input"
-                placeholder=""
-                id="inputPhoneNumer"
-                FieldName="PhoneNumber"
-                v-model="this.employee.PhoneNumber"
-              />
-            </div>
+            <FieldInputLabel class="form-item" :customData="emailInput"/>
+            <FieldInputLabel class="form-item" :customData="phoneNumberInput"/>
           </div>
         </div>
         <div class="form__group">
@@ -152,44 +58,11 @@
             </div>
           </div>
           <div class="form-row">
-            <div class="form-item">
-              <label for="inputTaxCode" class="text-label"
-                >Mã số thuế cá nhân</label
-              >
-              <input
-                type="text"
-                class="field-input"
-                placeholder=""
-                id="inputTaxCode"
-              />
-            </div>
-            <div class="form-item">
-              <label for="inputSalary" class="text-label"
-                >Mức lương cơ bản</label
-              >
-              <input
-                type="text"
-                class="field-input"
-                placeholder=""
-                id="inputSalary"
-                FieldName="Salary"
-                DataType="Number"
-                v-model="this.employee.Salary"
-              />
-            </div>
+            <FieldInputLabel class="form-item" :customData="taxCodeInput"/>
+            <FieldInputLabel class="form-item" :customData="salaryInput"/>
           </div>
           <div class="form-row">
-            <div class="form-item">
-              <label for="inputJoinDate" class="text-label"
-                >Ngày gia nhập công ty</label
-              >
-              <input
-                type="date"
-                class="field-input"
-                placeholder=""
-                id="inputJoinDate"
-              />
-            </div>
+            <FieldInputLabel class="form-item" :customData="joinDateInput"/>
             <div class="form-item">
               <label class="text-label">Tình trạng công việc</label>
               <Dropdown :customData="workStatusDropdown" />
@@ -211,52 +84,163 @@
 <script>
 import Employee from '../../model/EmployeeModel'
 
-export default {
-  data() {
-      
+/**
+ * Hàm khởi tạo giá trị cho form
+ * NVTOAN 14/06/2021
+ */
+function initState() {
     return {
       showForm: false,
 
+      //input
+      employeeCodeInput: {
+        inputId: "inputEmployeeCode",
+        labelText: "Mã nhân viên",
+        isRequired: true,
+        inputType: "text",
+      },
+
+      employeeNameInput: {
+        inputId: "inputFullname",
+        labelText: "Họ và tên",
+        isRequired: true,
+        inputType: "text"
+      },
+      
+      dateOfBirthInput: {
+        inputId: "inputDateOfBirth",
+        labelText: "Ngày sinh",
+        inputType: "date"
+      },
+
+      identityNumberInput: {
+        inputId: "inputIdentityNumber",
+        labelText: "Số CMTND/ Căn cước",
+        isRequired: true,
+        inputType: "text"
+      },
+
+      identityDateInput: {
+        inputId: "inputIdentityDate",
+        labelText: "Ngày cấp",
+        inputType: "date"
+      },
+
+      identityPlaceInput: {
+        inputId: "inputIdentityPlace",
+        labelText: "Nơi cấp",
+        inputType: "text"
+      },
+
+      emailInput: {
+        inputId: "inputEmail",
+        labelText: "Email",
+        isRequired: true,
+        inputType: "text",
+        dataType: "Email"
+      },
+
+      phoneNumberInput: {
+        inputId: "inputPhoneNumber",
+        labelText: "Số điện thoại",
+        isRequired: true,
+        inputType: "text",
+      },
+
+      taxCodeInput: {
+        inputId: "inputTaxCode",
+        labelText: "Mã số thuế cá nhân",
+        inputType: "text",
+      },
+
+      salaryInput: {
+        inputId: "inputSalary",
+        labelText: "Mức lương cơ bản",
+        inputType: "text",
+        dataType: "Number"
+      },
+
+      joinDateInput: {
+        inputId: "inputJoinDate",
+        labelText: "Ngày gia nhập công ty",
+        inputType: "date",
+      },
+
+      //dropdown
       genderDropdown: {
         defaultValue: "",
         items: ["Nam", "Nữ", "Khác"],
         width: "3 + 16px",
+        select: null
       },
 
       departmentDropdown: {
         defaultValue: "",
         items: ["Phòng nhân sự", "Phòng kế toán", "Phòng kinh doanh"],
         width: "3 + 16px",
+        select: null
       },
 
       positionDropdown: {
         defaultValue: "",
         items: ["Nhân viên", "Giám đốc", "Trưởng phòng"],
         width: "3 + 16px",
+        select: null
       },
 
       workStatusDropdown: {
         defaultValue: "",
         items: ["Đang làm việc", "Đang thử việc", "Đã nghỉ việc"],
         width: "3 + 16px",
+        select: null
       },
 
       employee: new Employee().initData(),
     };
+  }
+export default {
+  data() {
+       console.log("d");
+
+    return initState();
+  },
+  created() {
+    
   },
   methods: {
     /**
      * Hàm mở form
      * NVTOAN 13/06/2021
      */
-    openForm(employeeId) {
+    openForm(employeeId) { 
+      //Gán lại giá trị của form
+      Object.assign(this.$data, initState());
+
+        //Nếu là form sửa
         if(employeeId.length > 0) {
             this.employee = this.getEmployeeById(employeeId);
+
+            //Set dropdown
             this.genderDropdown.select = this.genderDropdown.items.indexOf(this.employee.GenderName);
             this.departmentDropdown.select = this.departmentDropdown.items.indexOf(this.employee.DepartmentName);
             this.positionDropdown.select = this.positionDropdown.items.indexOf(this.employee.PositionName);
             this.workStatusDropdown.select = this.workStatusDropdown.items.indexOf(this.employee.WorkStatusName);
-        }
+
+            //bind dữ liệu input
+            this.employeeCodeInput.model = this.employee.EmployeeCode;
+            this.employeeNameInput.model = this.employee.FullName;
+            this.dateOfBirthInput.model = this.employee.DateOfBirth;
+            this.identityNumberInput.model = this.employee.IdentityNumber;
+            this.identityDateInput.model = this.employee.IdentityDate;
+            this.identityPlaceInput.model = this.employee.IdentityPlace;
+            this.emailInput.model = this.employee.Email;
+            this.phoneNumberInput.model = this.employee.PhoneNumber;
+            this.taxCodeInput.model = this.employee.PersonalTaxCode;
+            this.salaryInput.model = this.employee.Salary;
+            this.joinDateInput.model = this.employee.JoinDate;
+
+        } 
+
         this.showForm = true;
     },
 
@@ -293,7 +277,7 @@ export default {
                 "PositionCode": null,
                 "PositionName": "Giám đốc",
                 "DepartmentCode": null,
-                "DepartmentName": "Phòng nhân sự",
+                "DepartmentName": "Phòng kinh doanh",
                 "QualificationName": null,
                 "GenderName": "Nữ",
                 "EducationalBackgroundName": null,

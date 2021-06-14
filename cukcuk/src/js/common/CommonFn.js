@@ -47,5 +47,4 @@ var CommonFn = CommonFn || {};
     return data;
  }
 
-
 export default CommonFn;
