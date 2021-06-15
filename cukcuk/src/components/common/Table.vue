@@ -18,7 +18,7 @@
         @dblclick="editItem(item)"
       >
         <td v-for="(col, index) in customData.column" :key="index">
-          {{ getDisplayValue(item[col.fieldName], col.dataType, col) }}
+          {{ getDisplayValue(item[col.fieldName], col.dataType, col.enumName) }}
         </td>
       </tr>
     </tbody>
@@ -27,7 +27,6 @@
 
 <script>
 import CommonFn from '../../js/common/CommonFn'
-import Resource from '../../js/common/Resource'
 
 export default {
   props: {
@@ -80,24 +79,7 @@ export default {
      * NVTOAN 13/06/2021
      */
     getDisplayValue(data, dataType, column) {
-        let temp = data;
-        if(typeof data == 'object' && data) {
-            temp = {...data};
-        }
-
-        switch(dataType) {
-            case Resource.DataTypeColumn.Number:
-                temp = CommonFn.formatNumber(temp);
-                break;
-            case Resource.DataTypeColumn.Date:
-                temp = CommonFn.formatDate(temp);
-                break;
-            case Resource.DataTypeColumn.Enum:
-                temp = CommonFn.getEnumValue(temp, column.enumName);
-                break;
-        }
-        
-        return temp;
+        return CommonFn.convertOriginData(data, dataType, column);
     }
   },
 };

@@ -13,7 +13,8 @@ Vue.config.productionTip = false
 
 Vue.use(Bus);
 Vue.use(ElementUI);
-Vue.use(VTooltip)
+Vue.use(VTooltip);
+
 
 Vue.component('FieldInputIcon', FieldInputIcon);
 Vue.component('Dropdown', Dropdown);

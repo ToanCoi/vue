@@ -9,7 +9,7 @@
     width: fit-content;
     max-height: 100vh;
     z-index: 3;
-    overflow: scroll;
+    overflow: auto;
 }
 
 .form__title {
@@ -74,10 +74,6 @@
 .form-item>.dropdown {
     margin-left: 0px;
     padding-left: 0;
-}
-
-.form-item .dropdown__list {
-    width: calc(var(--column-width) * 3.5);
 }
 
 .form-item .dropdown .dropdown__btn {

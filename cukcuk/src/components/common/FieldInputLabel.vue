@@ -1,5 +1,5 @@
 <template>
-  <div class="tooltip" :style="{'--scale': scaleTooltip, '--tooltip-message': errorMessage + ''}">
+  <div class="tooltip" :style="{'--scale': scaleTooltip, '--tooltip-message': errorMessage}">
     <label :for="customData.inputId" class="text-label"
       >{{ customData.labelText }}
       <span v-if="customData.isRequired">
@@ -14,6 +14,7 @@
       :id="customData.inputId"
       @focus="focus"
       @blur="blur"
+      ref="input"
       v-model="customData.model"
     />
     
@@ -21,6 +22,7 @@
 </template>
 
 <script>
+import CommonFn from '../../js/common/CommonFn';
 import Resource from '../../js/common/Resource';
 
 export default {
@@ -37,6 +39,10 @@ export default {
           invalidInput: false
       }
   },
+  mounted() {
+    this.$refs.input.value = CommonFn.convertOriginData(this.customData.model, this.customData.dataType, null); 
+    console.log(this.customData.model + " " + this.customData.dataType)
+  },
   methods: {
       /**
        * Hàm xử lý sự kiện focus
@@ -51,7 +57,7 @@ export default {
        * NVTOAN 14/06/2021
        */
       blur() {
-          this.validate();console.log("afsd")
+          this.validate();
       },
 
       /**
@@ -101,13 +107,13 @@ export default {
 
         switch(this.customData.dataType) {
           case Resource.DataTypeColumn.Number:
-            if(isNaN(value)) res = false;
+            res = this.validateMoney(value);
             break;
           case Resource.DataTypeColumn.Email:
             res = this.validateEmail(value);
             break;
-          case Resource.DataTypeColumn.Date:console.log("asfdf")
-            res = this.validateDate(value);
+          case Resource.DataTypeColumn.Date:
+            res = this.validateDate(value); 
             break
         }
 
@@ -118,8 +124,18 @@ export default {
        * Validate Email
        * NVTOAN 14/06/2021
        */
+      validateMoney(value) {
+        let regex = /^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?,\d{1,2}$/;
+
+        return regex.test(value);
+      },
+
+      /**
+       * Validate Email
+       * NVTOAN 14/06/2021
+       */
       validateEmail(value) {
-        var regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        let regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
         return regex.test(value);
       },
@@ -129,7 +145,7 @@ export default {
        * NVTOAN 14/06/2021
        */
       validateDate(value) {
-        var regex = /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$|(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\5(?:0?[1-9]|1\d|2[0-8])$|^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)0?2\6(29)$|^(?:(?:1[6-9]|[2-9]\d)?\d{2})(?:(?:(\/|-|\.)(?:0?[1,3-9]|1[0-2])\8(?:29|30))|(?:(\/|-|\.)(?:0?[13578]|1[02])\9(?:31)))$/;
+        let regex = /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$|(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\5(?:0?[1-9]|1\d|2[0-8])$|^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)0?2\6(29)$|^(?:(?:1[6-9]|[2-9]\d)?\d{2})(?:(?:(\/|-|\.)(?:0?[1,3-9]|1[0-2])\8(?:29|30))|(?:(\/|-|\.)(?:0?[13578]|1[02])\9(?:31)))$/;
         
         return regex.test(value);
       }

@@ -23,6 +23,11 @@ tbody tr {
     cursor: pointer;
 }
 
+td {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 tbody tr:nth-child(odd) {
     background-color: #fafafa;
 }

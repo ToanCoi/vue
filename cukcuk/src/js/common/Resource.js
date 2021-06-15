@@ -5,7 +5,9 @@ Resource.DataTypeColumn = {
     Number: "Number",
     Date: "Date",
     Enum: "Enum",
-    Email: "Email"
+    Email: "Email",
+    Name: "Name",
+    DateForm: "DateForm"
 }
 
 //Giới tính

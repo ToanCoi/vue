@@ -1,5 +1,5 @@
 <template>
-  <form class="form" v-if="showForm">
+  <div class="form" v-if="showForm">
     <div class="form__title">
       <span class="form__title-text text-title text-uppercase"
         >Thông tin nhân viên</span
@@ -78,7 +78,7 @@
         <span class="btn__name">Lưu</span>
       </div>
     </div>
-  </form>
+  </div>
 </template>
 
 <script>
@@ -104,13 +104,15 @@ function initState() {
         inputId: "inputFullname",
         labelText: "Họ và tên",
         isRequired: true,
-        inputType: "text"
+        inputType: "text",
+        dataType: "Name"
       },
       
       dateOfBirthInput: {
         inputId: "inputDateOfBirth",
         labelText: "Ngày sinh",
-        inputType: "date"
+        inputType: "date",
+        dataType: "DateForm"
       },
 
       identityNumberInput: {
@@ -123,7 +125,8 @@ function initState() {
       identityDateInput: {
         inputId: "inputIdentityDate",
         labelText: "Ngày cấp",
-        inputType: "date"
+        inputType: "date",
+        dataType: "DateForm"
       },
 
       identityPlaceInput: {
@@ -164,6 +167,7 @@ function initState() {
         inputId: "inputJoinDate",
         labelText: "Ngày gia nhập công ty",
         inputType: "date",
+        dataType: "DateForm"
       },
 
       //dropdown
@@ -196,12 +200,11 @@ function initState() {
       },
 
       employee: new Employee().initData(),
+      originData: null
     };
   }
 export default {
   data() {
-       console.log("d");
-
     return initState();
   },
   created() {
@@ -218,7 +221,11 @@ export default {
 
         //Nếu là form sửa
         if(employeeId.length > 0) {
-            this.employee = this.getEmployeeById(employeeId);
+            this.originData = this.getEmployeeById(employeeId);
+
+            for(var prop in this.employee) {
+              this.employee[prop] = this.originData[prop];
+            }
 
             //Set dropdown
             this.genderDropdown.select = this.genderDropdown.items.indexOf(this.employee.GenderName);
@@ -256,7 +263,7 @@ export default {
                 "EmployeeCode": "3123123",
                 "FirstName": null,
                 "LastName": null,
-                "FullName": "313231323",
+                "FullName": "asdf dsfd asdf",
                 "Gender": 0,
                 "DateOfBirth": "2021-06-09T00:00:00",
                 "PhoneNumber": "12323132",
@@ -265,7 +272,7 @@ export default {
                 "IdentityNumber": "7777",
                 "IdentityDate": "1970-01-01T00:00:00",
                 "IdentityPlace": "ádasd",
-                "JoinDate": null,
+                "JoinDate": "2021-06-09T00:00:00",
                 "MartialStatus": null,
                 "EducationalBackground": null,
                 "QualificationId": null,

@@ -7,10 +7,12 @@ export default class EmployeeModel {
             DateOfBirth: '',
             PhoneNumber: '',
             Email: '',
-            Position: '',
-            Department: '',
+            PositionName: '',
+            DepartmentName: '',
             Salary: '',
-            WorkStatus: ''
+            WorkStatus: '',
+            JoinDate: '',
+            IdentityDate: ''
         };
     }
 }
