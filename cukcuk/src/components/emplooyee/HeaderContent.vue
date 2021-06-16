@@ -19,7 +19,7 @@ export default {
          */
         openForm() {
             this.$emit('openForm', null);
-            this.$bus.emit('showOverlay', true);
+            this.$bus.emit('overlay', true);
         }
     },
 }

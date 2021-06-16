@@ -72,7 +72,7 @@ export default {
   },
   watch: {
     cloneModel: function(val) {
-      this.$bus.emit('updateValueInput', this.customData.inputId, val);
+      this.$emit('updateValueInput', this.customData.inputId, val);
     },
     model: function(val) {
       this.cloneModel = JSON.parse(JSON.stringify(val)); 

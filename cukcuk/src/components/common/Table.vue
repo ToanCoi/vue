@@ -71,15 +71,15 @@ export default {
      */
     editItem(item) {
         this.$emit('openForm', item);
-        this.$bus.emit("showOverlay", true);
+        this.$bus.emit("overlay", true);
     },
 
     /**
      * Hàm chuyển đổi dữ liệu để hiển thị lên bảng
      * NVTOAN 13/06/2021
      */
-    getDisplayValue(data, dataType, column) {
-        return CommonFn.convertOriginData(data, dataType, column);
+    getDisplayValue(data, dataType, enumName) {
+        return CommonFn.convertOriginData(data, dataType, enumName);
     }
   },
 };

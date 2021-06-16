@@ -68,7 +68,7 @@ var CommonFn = CommonFn || {};
   CommonFn.convertOriginData = (data, dataType, enumName) => {
     let temp = ''; 
     
-    if(data) {
+    if(data != null) {
         temp = data;
     
         switch(dataType) {

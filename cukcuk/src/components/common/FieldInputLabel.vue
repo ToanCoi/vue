@@ -34,6 +34,10 @@ export default {
     },
     model: {
       default: ''
+    },
+    saveValidate: {
+      type: Boolean,
+      default: false
     }
   },
   data() {
@@ -55,13 +59,18 @@ export default {
    },
   watch: {
     cloneModel: function(val) {
-      this.$bus.emit('updateValueInput', this.customData.inputId, val);
+      this.$emit('updateValueInput', this.customData.inputId, val);
     },
     model: function(val) {
       this.cloneModel = JSON.parse(JSON.stringify(val));
       if(this.customData.dataType == "Date") {
         this.cloneModel = moment(this.cloneModel).format("YYYY-MM-DD");
       } 
+    },
+    saveValidate: function(val) {
+      if(val) {
+        this.validate();
+      }
     }
   },
   methods: {
@@ -86,22 +95,24 @@ export default {
        * NVTOAN 14/06/2021
        */
       validate() {
-          let value = this.model;
+          let value = this.cloneModel;
 
-          if(typeof this.model == 'object') {
-            value = JSON.stringify(this.model);
-          }
 
           if(this.validateRequired(value)) {
-              if(!this.validateDatType(value)) {
+              if(!this.validateDataType(value)) {
                 this.errorMessage = "'" + this.customData.labelText + ' không hợp lệ' + "'";
                 this.invalidInput = true;
                 this.scaleTooltip = 1;
+
+                //Dữ liệu chưa hợp lệ
+                this.$emit('invalidData');
               }
           } else {
               this.errorMessage = "'" + this.customData.labelText + ' không được để trống' + "'";
               this.invalidInput = true;
               this.scaleTooltip = 1;
+
+              this.$emit('invalidData');
           }
 
       },
@@ -123,12 +134,12 @@ export default {
        * Hàm validate theo kiểu dữ liệu
        * NVTOAN 14/06/2021
        */
-      validateDatType(value) {
+      validateDataType(value) {
         let res = true;
 
         switch(this.customData.dataType) {
           case Resource.DataTypeColumn.Number:
-            res = this.validateMoney(value);
+            res = !isNaN(value);
             break;
           case Resource.DataTypeColumn.Email:
             res = this.validateEmail(value);
@@ -139,16 +150,6 @@ export default {
         }
 
         return res;
-      },
-
-      /**
-       * Validate Email
-       * NVTOAN 14/06/2021
-       */
-      validateMoney(value) {
-        let regex = /^\$?(([1-9]\d{0,2}(,\d{3})*)|0)?,\d{1,2}$/;
-
-        return regex.test(value);
       },
 
       /**
@@ -168,7 +169,7 @@ export default {
       validateDate(value) {
         let regex = /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[1,3-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$|(?:(?:1[6-9]|[2-9]\d)?\d{2})(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\5(?:0?[1-9]|1\d|2[0-8])$|^(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00)))(\/|-|\.)0?2\6(29)$|^(?:(?:1[6-9]|[2-9]\d)?\d{2})(?:(?:(\/|-|\.)(?:0?[1,3-9]|1[0-2])\8(?:29|30))|(?:(\/|-|\.)(?:0?[13578]|1[02])\9(?:31)))$/;
         
-        return regex.test(value);
+        return regex.test(value) || !value;
       }
   }
 };

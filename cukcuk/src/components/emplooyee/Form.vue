@@ -15,63 +15,99 @@
           (Vui lòng chọn ảnh có định dạng .jpg .jpeg .png .gif)
         </div>
       </div>
-      <div class="form__component">
-        <div class="form__group">
+      <div class="form__component" ref="formData">
+        <div class="form__group" >
           <span class="form__group-title text-uppercase"
             >A. Thông tin chung</span
           >
           <div class="form-row">
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.EmployeeCode"
               :customData="employeeCodeInput"
+              :saveValidate="saveValidate"
             />
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.FullName"
               :customData="employeeNameInput"
+              :saveValidate="saveValidate"
             />
           </div>
           <div class="form-row">
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.DateOfBirth"
               :customData="dateOfBirthInput"
+              :saveValidate="saveValidate"
             />
             <div class="form-item">
               <label class="text-label">Giới tính</label>
-              <Dropdown :model="employee.Gender" :customData="genderDropdown" />
+              <Dropdown
+                v-on:updateValueInput="updateValueInput"
+                :model="employee.Gender"
+                :customData="genderDropdown"
+              />
             </div>
           </div>
           <div class="form-row">
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.IdentityNumber"
               :customData="identityNumberInput"
+              :saveValidate="saveValidate"
             />
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.IdentityDate"
               :customData="identityDateInput"
+              :saveValidate="saveValidate"
             />
           </div>
           <div class="form-row">
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.IdentityPlace"
               :customData="identityPlaceInput"
+              :saveValidate="saveValidate"
             />
           </div>
           <div class="form-row">
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.Email"
               :customData="emailInput"
+              :saveValidate="saveValidate"
             />
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.PhoneNumber"
               :customData="phoneNumberInput"
+              :saveValidate="saveValidate"
             />
           </div>
         </div>
@@ -83,6 +119,7 @@
             <div class="form-item">
               <label class="text-label">Vị trí</label>
               <Dropdown
+                v-on:updateValueInput="updateValueInput"
                 :model="employee.PositionName"
                 :customData="positionDropdown"
               />
@@ -90,6 +127,7 @@
             <div class="form-item">
               <label class="text-label">Phòng ban</label>
               <Dropdown
+                v-on:updateValueInput="updateValueInput"
                 :model="employee.DepartmentName"
                 :customData="departmentDropdown"
               />
@@ -97,25 +135,38 @@
           </div>
           <div class="form-row">
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.PersonalTaxCode"
               :customData="taxCodeInput"
+              :saveValidate="saveValidate"
             />
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.Salary"
               :customData="salaryInput"
+              :saveValidate="saveValidate"
             />
           </div>
           <div class="form-row">
             <FieldInputLabel
+              mustValidate="true"
+              v-on:updateValueInput="updateValueInput"
+              @invalidData="invalidData"
               class="form-item"
               :model="employee.JoinDate"
               :customData="joinDateInput"
+              :saveValidate="saveValidate"
             />
             <div class="form-item">
               <label class="text-label">Tình trạng công việc</label>
               <Dropdown
+                v-on:updateValueInput="updateValueInput"
                 :model="employee.WorkStatus"
                 :customData="workStatusDropdown"
               />
@@ -242,21 +293,16 @@ function initState() {
 
     employee: {},
     id: null,
+    saveValidate: false,
+    allInputValid: true,
+    
   };
 }
 export default {
   data() {
     return initState();
   },
-  created() {
-    /**
-     * Hàm update dữ liệu từ các ô input, dropdown ra dữ liệu gốc thông qua event bus
-     * NVTOAN 16/06/2021
-     */
-    this.$bus.on("updateValueInput", (key, value) => {
-      this.employee[key] = value;
-    });
-  },
+  created() {},
   methods: {
     /**
      * Hàm mở form
@@ -285,33 +331,61 @@ export default {
           this.employee = response.data;
         });
     },
+
+    updateValueInput(key, value) {
+      this.employee[key] = value;
+    },
+
     /**
      * Hàm đóng form
      * NVTOAN 13/06/2021
      */
     closeForm() {
       this.showForm = false;
-      this.$bus.emit("hideOverlay", false);
+      this.$bus.emit("overlay", false);
     },
 
+    /**
+     * Nếu tất cả các trường dữ liệu chưa đúng
+     * NVTOAN 16/06/2021
+     */
+    invalidData() {
+      this.allInputValid = false;console.log('asfs')
+    },
     /**
      * Hàm lưu dữ liệu
      * NVTOAN 16/06/2021
      */
-    saveData() {
-      if (!this.id) {
-        this.axios
-          .post("http://cukcuk.manhnv.net/v1/Employees/", this.employee)
-          .then((response) => {
-            console.log(response);
-          });
-      } else {
-        this.axios
-          .put("http://cukcuk.manhnv.net/v1/Employees/" + this.id, this.employee)
-          .then((response) => {
-            console.log(response);
-          });
-      }
+    async saveData() {console.log('df')
+      //Validate tất cả dữ liệu trước khi lưu
+      this.saveValidate = true;
+        
+      this.$refs.formData.querySelectorAll("[mustValidate]")
+    
+      // if (this.allInputValid) {
+      //   if (!this.id) {
+      //     await this.axios
+      //       .post("http://cukcuk.manhnv.net/v1/Employees/", this.employee)
+      //       .then((response) => {
+      //         console.log(response);
+      //       });
+      //   } else {
+      //     await this.axios
+      //       .put(
+      //         "http://cukcuk.manhnv.net/v1/Employees/" + this.id,
+      //         this.employee
+      //       )
+      //       .then((response) => {
+      //         console.log(response);
+      //       });
+      //   }
+      //   this.closeForm();
+
+      //   this.$emit("refreshData");
+      // }
+
+      //reset giá trị để nếu ấn lại thì kiểm tra lại
+      this.allInputValid = true;
     },
   },
 };

@@ -5,8 +5,8 @@
             <Dropdown :customData="departmentDropdown"/>
             <Dropdown :customData="positionDropdown"/>
         </div>   
-        <div class="util__right btn btn-default">
-            <div class="btn-refresh" EmployeeToolbarItem="true" FormType="Refresh"></div>
+        <div class="util__right btn btn-default" @click="refreshData">
+            <div class="btn-refresh"></div>
         </div>
     </div>
 </template>
@@ -31,6 +31,11 @@ export default {
                 items: ["Nhân viên", "Giám đốc", "Trưởng phòng"],
                 width: 2.8
             }
+        }
+    },
+    methods: {
+        refreshData() {
+            this.$emit('refreshData');
         }
     }
 }

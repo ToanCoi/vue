@@ -3,6 +3,9 @@
     <Navbar v-on:toggleNav="toggleNav"/>
     <Main/>
     <div class="overlay" v-show="overlayShow"></div>
+    <div class="loader" v-show="loaderShow">
+        <div class="loader__icon"></div>
+    </div>
   </div>
 </template>
 
@@ -19,24 +22,25 @@ export default {
   data() {
     return {
       smallNav: false,
-      overlayShow: false
+      overlayShow: false,
+      loaderShow: false
     }
   },
   created() {
     /**
-     * Bắt sự kiện mở overlay
+     * Đóng mở ovelay
      * NVTOAN 13/06/2021
      */
-    this.$bus.on('showOverlay', value => {
+    this.$bus.on('overlay', value => {
       this.overlayShow = value;
     });
 
     /**
-     * Bắt sự kiện đóng overlay
-     * NVTOAN 13/06/2021
+     * Đóng mở loader
+     * NVTOAN 16/06/2021
      */
-    this.$bus.on('hideOverlay', value => {
-      this.overlayShow = value;
+    this.$bus.on('loader', value => {
+      this.loaderShow = value;
     })
   },
   methods: {

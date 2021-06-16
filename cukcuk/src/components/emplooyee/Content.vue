@@ -1,10 +1,10 @@
 <template>
     <div class="content">
         <HeaderContent v-on:openForm="openForm"/>
-        <ContentUtil/>
+        <ContentUtil @refreshData="getDataServer"/>
         <Table :customData="employeeTable" v-on:openForm="openForm"/>
         <Paging/>
-        <Form ref="Form"/>
+        <Form ref="Form" v-on:refreshData="getDataServer"/>
     </div>
 </template>
 
@@ -99,10 +99,14 @@ export default {
          * NVTOAN 16/06/2021
          */
         getDataServer() {
+            this.$bus.emit('loader', true);
             this.axios.get('http://cukcuk.manhnv.net/v1/Employees').then((response) => {
                 this.employeeTable.data = response.data; 
+                this.$bus.emit('loader', false);
             });
-        }
+        },
+
+        
     },
 }
 </script>
