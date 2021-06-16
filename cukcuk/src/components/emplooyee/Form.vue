@@ -15,14 +15,13 @@
           (Vui lòng chọn ảnh có định dạng .jpg .jpeg .png .gif)
         </div>
       </div>
-      <div class="form__component" ref="formData">
-        <div class="form__group" >
+      <div class="form__component">
+        <div class="form__group">
           <span class="form__group-title text-uppercase"
             >A. Thông tin chung</span
           >
           <div class="form-row">
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -31,7 +30,6 @@
               :saveValidate="saveValidate"
             />
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -42,7 +40,6 @@
           </div>
           <div class="form-row">
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -61,7 +58,6 @@
           </div>
           <div class="form-row">
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -70,7 +66,6 @@
               :saveValidate="saveValidate"
             />
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -81,7 +76,6 @@
           </div>
           <div class="form-row">
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -92,7 +86,6 @@
           </div>
           <div class="form-row">
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -101,7 +94,6 @@
               :saveValidate="saveValidate"
             />
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -135,7 +127,6 @@
           </div>
           <div class="form-row">
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -144,7 +135,6 @@
               :saveValidate="saveValidate"
             />
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -155,7 +145,6 @@
           </div>
           <div class="form-row">
             <FieldInputLabel
-              mustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
@@ -359,30 +348,28 @@ export default {
     async saveData() {console.log('df')
       //Validate tất cả dữ liệu trước khi lưu
       this.saveValidate = true;
-        
-      this.$refs.formData.querySelectorAll("[mustValidate]")
-    
-      // if (this.allInputValid) {
-      //   if (!this.id) {
-      //     await this.axios
-      //       .post("http://cukcuk.manhnv.net/v1/Employees/", this.employee)
-      //       .then((response) => {
-      //         console.log(response);
-      //       });
-      //   } else {
-      //     await this.axios
-      //       .put(
-      //         "http://cukcuk.manhnv.net/v1/Employees/" + this.id,
-      //         this.employee
-      //       )
-      //       .then((response) => {
-      //         console.log(response);
-      //       });
-      //   }
-      //   this.closeForm();
+  
+      if (this.allInputValid) {
+        if (!this.id) {
+          await this.axios
+            .post("http://cukcuk.manhnv.net/v1/Employees/", this.employee)
+            .then((response) => {
+              console.log(response);
+            });
+        } else {
+          await this.axios
+            .put(
+              "http://cukcuk.manhnv.net/v1/Employees/" + this.id,
+              this.employee
+            )
+            .then((response) => {
+              console.log(response);
+            });
+        }
+        this.closeForm();
 
-      //   this.$emit("refreshData");
-      // }
+        this.$emit("refreshData");
+      }
 
       //reset giá trị để nếu ấn lại thì kiểm tra lại
       this.allInputValid = true;
