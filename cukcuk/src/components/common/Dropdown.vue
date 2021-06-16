@@ -11,9 +11,9 @@
         </div>
         <div
           class="dropdown__icon-unselect"
-          v-show="selectedValue != customData.defaultValue"
-          @click="unselectItem"
+          v-if="selectedValue != customData.defaultValue"
           @click.stop="!isShow"
+          @click="unselectItem"
         >
           <i class="fas fa-times fa-xs"></i>
         </div>
@@ -51,25 +51,39 @@ export default {
       type: Object,
       required: true,
     },
+    model: {
+      type: Number,
+      default: -1
+    }
   },
   data() {
     return {
       isShow: false,
       customWidth: "",
       currentSelectedItem: null,
-      selectedValue: ""
+      cloneModel: '',
     };
   },
   created() {
     this.selectedValue = this.customData.defaultValue;
 
-    //Nếu khởi tạo chọn 1 item nào đó thì chọn
-    if(this.customData.select) {
-      this.click(this.customData.select);
-    }
-
     this.customWidth =
       "calc(var(--column-width) * " + this.customData.width + " )";
+  },
+  watch: {
+    cloneModel: function(val) {
+      this.$bus.emit('updateValueInput', this.customData.inputId, val);
+    },
+    model: function(val) {
+      this.cloneModel = JSON.parse(JSON.stringify(val)); 
+
+      if(this.customData.dataType == "Enum") {
+
+        if(this.cloneModel != null) {
+          this.click(this.cloneModel);
+        }
+      }
+    }
   },
   methods: {
     /**
@@ -94,6 +108,7 @@ export default {
      */
     click(index) {
       this.selectedValue = this.customData.items[index];
+      this.cloneModel = index;
       this.currentSelectedItem = index;
       this.isShow = false;
     },
@@ -105,6 +120,7 @@ export default {
     unselectItem() {
       this.selectedValue = this.customData.defaultValue;
       this.currentSelectedItem = null;
+      this.cloneModel = null;
     },
   },
 };

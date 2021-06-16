@@ -14,7 +14,6 @@ import ContentUtil from './ContentUtil'
 import Table from '../common/Table.vue'
 import Form from './Form.vue'
 import Paging from './Paging.vue'
-import employees from '../../data/employee.js'
 
 export default {
     components: {
@@ -75,17 +74,34 @@ export default {
                         enumName: "WorkStatus"
                     }
                 ],
-                data: employees,
+                data: null,
             }
         }
     },
+    created() {
+        this.getDataServer();
+    },
     methods: {
+        /**
+         * Hàm mở form 
+         * NVTOAN 14/06/2021
+         */
         openForm(employee) {
             if(employee) {
                 this.$refs.Form.openForm(employee.EmployeeId);
             } else {
                 this.$refs.Form.openForm("");
             }
+        },
+
+        /**
+         * Hàm lấy dữ liệu trên server
+         * NVTOAN 16/06/2021
+         */
+        getDataServer() {
+            this.axios.get('http://cukcuk.manhnv.net/v1/Employees').then((response) => {
+                this.employeeTable.data = response.data; 
+            });
         }
     },
 }

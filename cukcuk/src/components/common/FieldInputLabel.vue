@@ -15,15 +15,16 @@
       @focus="focus"
       @blur="blur"
       ref="input"
-      v-model="customData.model"
+      v-model="cloneModel"
+      :v-money="{'money': customData.dataType == 'Number'}"
     />
     
   </div>
 </template>
 
 <script>
-import CommonFn from '../../js/common/CommonFn';
-import Resource from '../../js/common/Resource';
+import Resource from '../../js/common/Resource'
+import moment from 'moment'
 
 export default {
   props: {
@@ -31,17 +32,37 @@ export default {
       type: Object,
       require: true,
     },
+    model: {
+      default: ''
+    }
   },
   data() {
       return {
           errorMessage: '',
           scaleTooltip: 0,
-          invalidInput: false
+          invalidInput: false,
+          money: {
+            decimal: ",",
+            thousands: ",",
+            precision: 3,
+            masked: true,
+          },
+          cloneModel: '',
       }
   },
-  mounted() {
-    this.$refs.input.value = CommonFn.convertOriginData(this.customData.model, this.customData.dataType, null); 
-    console.log(this.customData.model + " " + this.customData.dataType)
+  created() {
+    
+   },
+  watch: {
+    cloneModel: function(val) {
+      this.$bus.emit('updateValueInput', this.customData.inputId, val);
+    },
+    model: function(val) {
+      this.cloneModel = JSON.parse(JSON.stringify(val));
+      if(this.customData.dataType == "Date") {
+        this.cloneModel = moment(this.cloneModel).format("YYYY-MM-DD");
+      } 
+    }
   },
   methods: {
       /**
@@ -65,10 +86,10 @@ export default {
        * NVTOAN 14/06/2021
        */
       validate() {
-          let value = this.customData.model;
+          let value = this.model;
 
-          if(typeof this.customData.model == 'object') {
-            value = JSON.stringify(this.customData.model);
+          if(typeof this.model == 'object') {
+            value = JSON.stringify(this.model);
           }
 
           if(this.validateRequired(value)) {

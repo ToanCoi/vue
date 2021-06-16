@@ -48,22 +48,18 @@ var CommonFn = CommonFn || {};
   * Hàm lấy dữ liệu từ dang Enum
   * NVTOAN 13/06/2021
   */
- CommonFn.getEnumValue = (data, enumName) => {
+  CommonFn.getEnumValue = (data, enumName) => {
     let enumeration = Enumeration[enumName],
-        resource = Resource[enumName];
+        resource  = Resource[enumName];
 
-    for(var prop in enumeration) {
-        if(enumeration[prop] == data) {
-            data = resource[prop];
+    for(let propName in enumeration) {
+        if(enumeration[propName] == data) {
+            data = resource[propName];
         }
     }
-    
-    return data;
- }
 
- CommonFn.formatDateForm = dateSrc => {
-    return moment(dateSrc).format("YYYY-MM-DD");
- }
+    return data;
+}
 
  /**
  * Hàm chuyển đổi dữ liệu để hiển thị lên bảng
@@ -74,10 +70,6 @@ var CommonFn = CommonFn || {};
     
     if(data) {
         temp = data;
-
-        if(typeof data == 'object' && data) {
-            temp = {...data};
-        }
     
         switch(dataType) {
             case Resource.DataTypeColumn.Number:
@@ -91,9 +83,6 @@ var CommonFn = CommonFn || {};
                 break;
             case Resource.DataTypeColumn.Enum:
                 temp = CommonFn.getEnumValue(temp, enumName);
-                break;
-            case Resource.DataTypeColumn.DateForm:
-                temp = CommonFn.formatDateForm(temp);
                 break;
         }
     }
