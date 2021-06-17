@@ -1,6 +1,6 @@
 <template>
   <div class="wrapper" id="app" :class="{'nav-small': smallNav}">
-    <Navbar v-on:toggleNav="toggleNav"/>
+    <Navbar v-on:toggleNav="toggleNav" :customData="navbarData"/>
     <Main/>
     <div class="overlay" v-show="overlayShow"></div>
     <div class="loader" v-show="loaderShow">
@@ -23,7 +23,39 @@ export default {
     return {
       smallNav: false,
       overlayShow: false,
-      loaderShow: false
+      loaderShow: false,
+      navbarData: [
+        {
+          iconClass: 'icon-dashboard',
+          itemName: 'Tổng quan',
+          routerLink: '/'
+        },
+        {
+          iconClass: 'icon-report',
+          itemName: 'Báo cáo',
+          routerLink: '/'
+        },
+        {
+          iconClass: 'icon-setting',
+          itemName: 'Mua hàng',
+          routerLink: '/'
+        },
+        {
+          iconClass: 'icon-dic-employee',
+          itemName: 'Danh mục nhân viên',
+          routerLink: '/'
+        },
+        {
+          iconClass: 'icon-dic-employee',
+          itemName: 'Danh mục nhân viên',
+          routerLink: '/'
+        },
+        {
+          iconClass: 'icon-setting',
+          itemName: 'Thiết lập hệ thống',
+          routerLink: '/'
+        },
+      ]
     }
   },
   created() {

@@ -54,7 +54,7 @@ export default {
         deleteItems() {
             this.$bus.emit('loader', true);
             for(let i = 0; i < this.listItem.length; i++) {
-                this.axios.delete('http://cukcuk.manhnv.net/v1/Employees' + this.listItem[i]).then((response) => {
+                this.axios.delete('http://cukcuk.manhnv.net/v1/Employees/' + this.listItem[i]).then((response) => {
                     console.log(response);
                 });
             }

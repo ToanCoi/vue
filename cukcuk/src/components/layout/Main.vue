@@ -7,7 +7,7 @@
 
 <script>
 import Header from './Header.vue'
-import Content from './../employee/Content.vue'
+import Content from './Content.vue'
 
 export default {
   components: {
