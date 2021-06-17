@@ -46,11 +46,6 @@ export default {
           routerLink: '/employee'
         },
         {
-          iconClass: 'icon-dic-employee',
-          itemName: 'Danh mục nhân viên',
-          routerLink: ''
-        },
-        {
           iconClass: 'icon-setting',
           itemName: 'Thiết lập hệ thống',
           routerLink: ''

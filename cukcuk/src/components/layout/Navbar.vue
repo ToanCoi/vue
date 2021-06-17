@@ -73,7 +73,6 @@ export default {
      * NVTOAN 17/06/2021
      */
     hoverMenuItem(index) {
-      debugger; // eslint-disable-line no-debugger
       this.currentHoverMenu = index;
     },
 

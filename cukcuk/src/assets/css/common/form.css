@@ -26,6 +26,11 @@ form {
     justify-content: space-between;
     align-items: center;
     margin-left: 16px;
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    background-color: #fff;
+    z-index: 5;
 }
 
 .form__title-text {
@@ -97,6 +102,11 @@ form {
     justify-content: flex-end;
     padding-right: 16px;
     height: 60px;
+    position: -webkit-sticky;
+    position: sticky;
+    bottom: 0;
+    background-color: #fff;
+    z-index: 5;
 }
 
 .form__btn {

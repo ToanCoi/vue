@@ -5,6 +5,7 @@ import Bus from './EventBus'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
 import money from 'v-money'
+import VueTheMask from 'vue-the-mask'
 import ElementUI from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 import VTooltip from 'v-tooltip'
@@ -20,6 +21,7 @@ Vue.use(ElementUI);
 Vue.use(VTooltip);
 Vue.use(VueAxios, axios)
 Vue.use(money, {precision: 0})
+Vue.use(VueTheMask)
 
 Vue.component('FieldInputIcon', FieldInputIcon);
 Vue.component('Dropdown', Dropdown);

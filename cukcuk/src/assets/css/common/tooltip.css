@@ -21,7 +21,7 @@
 .tooltip::before {
     --translate-y: calc(-100% - var(--arrow-size));
 
-    content: "gdsfgdgdfggfdfgdf";
+    content: "";
     color: #fff;
     padding: .5rem;
     border-radius: .3rem;

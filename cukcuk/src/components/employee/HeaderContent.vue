@@ -12,11 +12,11 @@
         </div>
         <div class="header__icon">
             <div class="btn btn-primary btn-icon btn__add" @click="openForm">
-                <div class="btn__add-icon"></div>
+                <i class="fas fa-user-plus icon-btn"></i>
                 <span class="btn__name">Thêm nhân viên</span>
             </div>
-            <div class="btn btn-warning btn-icon btn__add" style="margin-left: 16px" @click="openFormDelete">
-                <div class="btn__add-icon"></div>
+            <div class="btn btn-danger btn-icon btn__add" style="margin-left: 16px" @click="openFormDelete">
+                <i class="fas fa-user-minus icon-btn"></i>
                 <span class="btn__name">Xóa nhân viên</span>
             </div>
         </div>

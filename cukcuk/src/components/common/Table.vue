@@ -2,7 +2,11 @@
   <table>
     <thead>
       <tr>
-        <td v-for="(item, index) in customData.column" :key="index">
+        <td
+          v-for="(item, index) in customData.column"
+          :key="index"
+          :title="item.columnName"
+        >
           {{ item.columnName }}
         </td>
       </tr>
@@ -15,11 +19,17 @@
         :class="{ 'tr-selected': selectRow(index) }"
         @mouseenter="rowHover"
         @mouseleave="rowUnhover"
-        @click.exact="rowClick(index)"
+        @click.exact="rowClick(index)"    
         @dblclick="editItem(item)"
         v-on:click.ctrl="multipleSelect(index)"
       >
-        <td v-for="(col, index) in customData.column" :key="index">
+        <td
+          v-for="(col, index) in customData.column"
+          :key="index"
+          :title="
+            getDisplayValue(item[col.fieldName], col.dataType, col.enumName)
+          "
+        >
           {{ getDisplayValue(item[col.fieldName], col.dataType, col.enumName) }}
         </td>
       </tr>
@@ -28,7 +38,7 @@
 </template>
 
 <script>
-import CommonFn from '../../js/common/CommonFn'
+import CommonFn from "../../js/common/CommonFn";
 
 export default {
   props: {
@@ -38,9 +48,9 @@ export default {
     },
   },
   data() {
-      return {
-        currentSelectedRow: [],
-      };
+    return {
+      currentSelectedRow: [],
+    };
   },
   methods: {
     /**
@@ -48,7 +58,7 @@ export default {
      * NVTOAN 13/06/2021
      */
     rowHover(e) {
-        e.target.classList.add("tr-hover");
+      e.target.classList.add("tr-hover");
     },
 
     /**
@@ -56,7 +66,7 @@ export default {
      * NVTOAN 13/06/2021
      */
     rowUnhover(e) {
-        e.target.classList.remove("tr-hover");
+      e.target.classList.remove("tr-hover");
     },
 
     /**
@@ -64,8 +74,8 @@ export default {
      * NVTOAN 13/06/2021
      */
     rowClick(index) {
-        this.currentSelectedRow = [];
-        this.currentSelectedRow.push(index);
+      this.currentSelectedRow = [];
+      this.currentSelectedRow.push(index);
     },
 
     /**
@@ -81,7 +91,7 @@ export default {
      * NVTOAN 13/06/2021
      */
     editItem(item) {
-        this.$emit('openForm', item);
+      this.$emit("openForm", item);
     },
 
     /**
@@ -97,7 +107,7 @@ export default {
      * NVTOAN 13/06/2021
      */
     getDisplayValue(data, dataType, enumName) {
-        return CommonFn.convertOriginData(data, dataType, enumName);
+      return CommonFn.convertOriginData(data, dataType, enumName);
     },
 
     /**
@@ -106,14 +116,14 @@ export default {
      */
     getSelectedEmployees() {
       let listId = [],
-          rows = this.$refs.tbody.querySelectorAll(".tr-selected");
+        rows = this.$refs.tbody.querySelectorAll(".tr-selected");
 
-      for(let i = 0; i < rows.length; i++) {
-        listId.push(rows[i].getAttribute('EmployeeId'));
+      for (let i = 0; i < rows.length; i++) {
+        listId.push(rows[i].getAttribute("EmployeeId"));
       }
 
       return listId;
-    }
+    },
   },
 };
 </script>

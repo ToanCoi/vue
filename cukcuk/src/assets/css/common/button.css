@@ -33,15 +33,23 @@
     background-color: #01b075;
 }
 
-.btn-warning {
+.btn-danger {
     background-color: #f65454;
     color: #fff;
 }
 
-.btn-warning:hover {
+.btn-danger:hover {
     background-color: #fa7e7e;
+}
+
+.btn-danger:active {
+    background-color: #f65454;
 }
 
 .btn-icon {
     padding: 0px 16px;
+}
+
+.icon-btn {
+    margin-right: 8px;
 }
