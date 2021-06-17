@@ -1,11 +1,24 @@
 <template>
     <div class="content__header">
-        <div class="content__name text-title">
+        <!-- <div class="content__name text-title">
             <span>Danh Sách nhân viên</span>
         </div>
         <div class="btn btn-primary btn-icon btn__add" @click="openForm">
             <div class="btn__add-icon"></div>
             <span class="btn__name">Thêm nhân viên</span>
+        </div> -->
+        <div class="content__name text-title">
+            <span>Danh Sách nhân viên</span>
+        </div>
+        <div class="header__icon">
+            <div class="btn btn-primary btn-icon btn__add" @click="openForm">
+                <div class="btn__add-icon"></div>
+                <span class="btn__name">Thêm nhân viên</span>
+            </div>
+            <div class="btn btn-warning btn-icon btn__add" style="margin-left: 16px" @click="openFormDelete">
+                <div class="btn__add-icon"></div>
+                <span class="btn__name">Xóa nhân viên</span>
+            </div>
         </div>
     </div>
 </template>
@@ -19,7 +32,10 @@ export default {
          */
         openForm() {
             this.$emit('openForm', null);
-            this.$bus.emit('overlay', true);
+        },
+
+        openFormDelete() {
+            this.$emit('openFormDelete', null)
         }
     },
 }
@@ -27,4 +43,7 @@ export default {
 
 <style scoped>
     @import url('../../assets/css/common/button.css');
+    .header__icon {
+        display: flex;
+    }
 </style>

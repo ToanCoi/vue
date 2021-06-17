@@ -1,10 +1,11 @@
 <template>
     <div class="content">
-        <HeaderContent v-on:openForm="openForm"/>
+        <HeaderContent v-on:openForm="openForm" v-on:openFormDelete="openFormDelete"/>
         <ContentUtil @refreshData="getDataServer"/>
-        <Table :customData="employeeTable" v-on:openForm="openForm"/>
+        <Table ref="Table" :customData="employeeTable" v-on:openForm="openForm"/>
         <Paging/>
         <Form ref="Form" v-on:refreshData="getDataServer"/>
+        <Popup ref="Popup" @refreshData="getDataServer" :customData="deletePopup"/>
     </div>
 </template>
 
@@ -14,6 +15,7 @@ import ContentUtil from './ContentUtil'
 import Table from '../common/Table.vue'
 import Form from './Form.vue'
 import Paging from './Paging.vue'
+import Popup from '../common/Popup.vue'
 
 export default {
     components: {
@@ -21,7 +23,8 @@ export default {
         ContentUtil,
         Table,
         Paging,
-        Form
+        Form,
+        Popup
     },
     data() {
         return {
@@ -75,6 +78,10 @@ export default {
                     }
                 ],
                 data: null,
+            },
+
+            deletePopup: {
+
             }
         }
     },
@@ -92,6 +99,16 @@ export default {
             } else {
                 this.$refs.Form.openForm("");
             }
+        },
+
+        /**
+         * Hàm open form Delete
+         * NVTOAN 17/06/2021
+         */
+        openFormDelete() {
+            let listId = this.$refs.Table.getSelectedEmployees();
+            
+            this.$refs.Popup.open(listId);
         },
 
         /**

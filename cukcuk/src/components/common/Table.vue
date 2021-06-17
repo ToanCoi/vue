@@ -7,15 +7,17 @@
         </td>
       </tr>
     </thead>
-    <tbody>
+    <tbody ref="tbody">
       <tr
         v-for="(item, index) in customData.data"
+        :EmployeeId="item.EmployeeId"
         :key="index"
-        :class="{ 'tr-selected': currentSelectedRow == index }"
+        :class="{ 'tr-selected': selectRow(index) }"
         @mouseenter="rowHover"
         @mouseleave="rowUnhover"
-        @click="rowClick(index)"
+        @click.exact="rowClick(index)"
         @dblclick="editItem(item)"
+        v-on:click.ctrl="multipleSelect(index)"
       >
         <td v-for="(col, index) in customData.column" :key="index">
           {{ getDisplayValue(item[col.fieldName], col.dataType, col.enumName) }}
@@ -37,7 +39,7 @@ export default {
   },
   data() {
       return {
-        currentSelectedRow: null,
+        currentSelectedRow: [],
       };
   },
   methods: {
@@ -62,7 +64,16 @@ export default {
      * NVTOAN 13/06/2021
      */
     rowClick(index) {
-        this.currentSelectedRow = index;
+        this.currentSelectedRow = [];
+        this.currentSelectedRow.push(index);
+    },
+
+    /**
+     * Hàm kiểm tra nếu ấn ctrl thì chọn nhiều
+     * NVTOAN 17/06/2021
+     */
+    multipleSelect(index) {
+      this.currentSelectedRow.push(index);
     },
 
     /**
@@ -71,7 +82,14 @@ export default {
      */
     editItem(item) {
         this.$emit('openForm', item);
-        this.$bus.emit("overlay", true);
+    },
+
+    /**
+     * Hàm xử lý chọn nhiều phần tử
+     * NVTOAN 17/06/2021
+     */
+    selectRow(index) {
+      return this.currentSelectedRow.includes(index);
     },
 
     /**
@@ -80,6 +98,21 @@ export default {
      */
     getDisplayValue(data, dataType, enumName) {
         return CommonFn.convertOriginData(data, dataType, enumName);
+    },
+
+    /**
+     * Hàm lấy ra tất cả nhân viên đang được chọn
+     * NVTOAN 17/06/2021
+     */
+    getSelectedEmployees() {
+      let listId = [],
+          rows = this.$refs.tbody.querySelectorAll(".tr-selected");
+
+      for(let i = 0; i < rows.length; i++) {
+        listId.push(rows[i].getAttribute('EmployeeId'));
+      }
+
+      return listId;
     }
   },
 };

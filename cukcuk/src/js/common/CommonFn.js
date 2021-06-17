@@ -23,7 +23,10 @@ var CommonFn = CommonFn || {};
   * @returns 
   */
  CommonFn.formatDate = dateSrc => {
-    return moment(dateSrc).format("DD/MM/YYYY");
+     if(dateSrc)
+        dateSrc =  moment(dateSrc).format("DD/MM/YYYY");
+
+    return dateSrc;
  }
 
  /**

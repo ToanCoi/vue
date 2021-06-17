@@ -1,15 +1,24 @@
 /* form */
-.form {
-    position: absolute;
+form {
+    position: fixed;
     top: 0;
     left: 0;
     right: 0;
-    margin: auto;
-    background-color: #fff;
-    width: fit-content;
-    max-height: 100vh;
+    background-color: rgba(0, 0, 0, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     z-index: 3;
     overflow: auto;
+}
+
+.form {
+    position: relative;
+    z-index: 4;
+    background-color: #fff;
+    width: fit-content;
+    overflow: auto;
+    max-height: 100vh;
 }
 
 .form__title {
@@ -92,4 +101,10 @@
 
 .form__btn {
     margin-left: 16px;
+}
+
+@media only screen and (min-height: 893px) {
+    form {
+        bottom: 0;
+    }
 }

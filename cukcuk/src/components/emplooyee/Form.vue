@@ -1,5 +1,6 @@
 <template>
-  <div class="form" v-if="showForm">
+  <form action="" v-if="showForm">
+    <div class="form">
     <div class="form__title">
       <span class="form__title-text text-title text-uppercase"
         >Thông tin nhân viên</span
@@ -15,37 +16,37 @@
           (Vui lòng chọn ảnh có định dạng .jpg .jpeg .png .gif)
         </div>
       </div>
-      <div class="form__component">
+      <div class="form__component" ref="FormData">
         <div class="form__group">
           <span class="form__group-title text-uppercase"
             >A. Thông tin chung</span
           >
           <div class="form-row">
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.EmployeeCode"
               :customData="employeeCodeInput"
-              :saveValidate="saveValidate"
             />
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.FullName"
               :customData="employeeNameInput"
-              :saveValidate="saveValidate"
             />
           </div>
           <div class="form-row">
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.DateOfBirth"
               :customData="dateOfBirthInput"
-              :saveValidate="saveValidate"
             />
             <div class="form-item">
               <label class="text-label">Giới tính</label>
@@ -58,48 +59,48 @@
           </div>
           <div class="form-row">
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.IdentityNumber"
               :customData="identityNumberInput"
-              :saveValidate="saveValidate"
             />
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.IdentityDate"
               :customData="identityDateInput"
-              :saveValidate="saveValidate"
             />
           </div>
           <div class="form-row">
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.IdentityPlace"
               :customData="identityPlaceInput"
-              :saveValidate="saveValidate"
             />
           </div>
           <div class="form-row">
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.Email"
               :customData="emailInput"
-              :saveValidate="saveValidate"
             />
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.PhoneNumber"
               :customData="phoneNumberInput"
-              :saveValidate="saveValidate"
             />
           </div>
         </div>
@@ -127,30 +128,30 @@
           </div>
           <div class="form-row">
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.PersonalTaxCode"
               :customData="taxCodeInput"
-              :saveValidate="saveValidate"
             />
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.Salary"
               :customData="salaryInput"
-              :saveValidate="saveValidate"
             />
           </div>
           <div class="form-row">
             <FieldInputLabel
+              MustValidate="true"
               v-on:updateValueInput="updateValueInput"
               @invalidData="invalidData"
               class="form-item"
               :model="employee.JoinDate"
               :customData="joinDateInput"
-              :saveValidate="saveValidate"
             />
             <div class="form-item">
               <label class="text-label">Tình trạng công việc</label>
@@ -172,6 +173,7 @@
       </div>
     </div>
   </div>
+  </form>
 </template>
 
 <script>
@@ -331,7 +333,6 @@ export default {
      */
     closeForm() {
       this.showForm = false;
-      this.$bus.emit("overlay", false);
     },
 
     /**
@@ -339,15 +340,21 @@ export default {
      * NVTOAN 16/06/2021
      */
     invalidData() {
-      this.allInputValid = false;console.log('asfs')
+      this.allInputValid = false;
     },
     /**
      * Hàm lưu dữ liệu
      * NVTOAN 16/06/2021
      */
-    async saveData() {console.log('df')
-      //Validate tất cả dữ liệu trước khi lưu
-      this.saveValidate = true;
+    async saveData() {
+
+      //Lấy ra tất cả trường input để validate
+      var elValidate = this.$refs.FormData.querySelectorAll('[MustValidate]');
+
+      for(let i = 0; i < elValidate.length; i++) {
+        await elValidate[i].querySelector('.field-input').focus();
+        await elValidate[i].querySelector('.field-input').blur();
+      }
   
       if (this.allInputValid) {
         if (!this.id) {

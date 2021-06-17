@@ -33,6 +33,15 @@
     background-color: #01b075;
 }
 
+.btn-warning {
+    background-color: #f65454;
+    color: #fff;
+}
+
+.btn-warning:hover {
+    background-color: #fa7e7e;
+}
+
 .btn-icon {
     padding: 0px 16px;
 }
