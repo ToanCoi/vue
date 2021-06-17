@@ -18,6 +18,7 @@ import Paging from './Paging.vue'
 import Popup from '../common/Popup.vue'
 
 export default {
+    name: 'Employee',
     components: {
         HeaderContent,
         ContentUtil,

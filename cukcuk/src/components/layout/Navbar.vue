@@ -8,12 +8,12 @@
                     </div>
                 </div>
                 <div class="nav__list">
-                    <div class="nav__list-item text-label nav__item-selected">
+                    <router-link to="/" class="nav__list-item text-label nav__item-selected">
                         <div class="nav__item-icon">
                             <div class="item__icon icon-dashboard"></div>
                         </div>
                         <span class="nav__item-name">Tổng quan</span>
-                    </div>
+                    </router-link>
                     <div class="nav__list-item text-label">
                         <div class="nav__item-icon">
                             <div class="item__icon icon-report"></div>
@@ -26,12 +26,12 @@
                         </div>
                         <span class="nav__item-name">Mua hàng</span>
                     </div>
-                    <div class="nav__list-item text-label">
+                    <router-link to='/Employee' class="nav__list-item text-label">
                         <div class="nav__item-icon">
                             <div class="item__icon icon-dic-employee"></div>
                         </div>
                         <span class="nav__item-name">Danh mục nhân viên</span>
-                    </div>
+                    </router-link>
                     <div class="nav__list-item text-label">
                         <div class="nav__item-icon">
                             <div class="item__icon icon-dic-employee"></div>
