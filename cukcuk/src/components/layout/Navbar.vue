@@ -6,73 +6,26 @@
         <div class="logo"></div>
       </div>
       <div class="nav__list">
-        <!-- <router-link
+        <router-link
           v-for="(item, index) in customData"
           :key="index"
           :to="getRouter(item.routerLink)"
           class="nav__list-item text-label"
+          :class="{
+            'nav__item-selected': currentSelectedMenu == index,
+            'nav__item-hover':
+              currentHoverMenu != currentSelectedMenu &&
+              index == currentHoverMenu,
+          }"
+          @click.native="selectMenuItem(index)"
+          @mouseenter.native="hoverMenuItem(index)"
+          @mouseleave.native="unhoverMenuItem"
         >
           <div class="nav__item-icon">
             <div class="item__icon" :class="item.iconClass"></div>
-            <span class="nav__item-name">{{item.itemName}}</span>
           </div>
-        </router-link> -->
-        <router-link
-          to="/"
-
-          class="nav__list-item text-label nav__item-selected"
-        >
-          <div class="nav__item-icon">
-            <div class="item__icon icon-dashboard"></div>
-          </div>
-          <span class="nav__item-name">Tổng quan</span>
+          <span class="nav__item-name">{{ item.itemName }}</span>
         </router-link>
-        <div
-         
-          class="nav__list-item text-label"
-        >
-          <div class="nav__item-icon">
-            <div class="item__icon icon-report"></div>
-          </div>
-          <span class="nav__item-name">Báo cáo</span>
-        </div>
-        <div
-         
-          class="nav__list-item text-label"
-        >
-          <div class="nav__item-icon">
-            <div class="item__icon icon-dashboard"></div>
-          </div>
-          <span class="nav__item-name">Mua hàng</span>
-        </div>
-        <router-link
-          to="/Employee"
-         
-          class="nav__list-item text-label"
-        >
-          <div class="nav__item-icon">
-            <div class="item__icon icon-dic-employee"></div>
-          </div>
-          <span class="nav__item-name">Danh mục nhân viên</span>
-        </router-link>
-        <div
-         
-          class="nav__list-item text-label"
-        >
-          <div class="nav__item-icon">
-            <div class="item__icon icon-dic-employee"></div>
-          </div>
-          <span class="nav__item-name">Danh mục nhân viên</span>
-        </div>
-        <div
-         
-          class="nav__list-item text-label"
-        >
-          <div class="nav__item-icon">
-            <div class="item__icon icon-setting"></div>
-          </div>
-          <span class="nav__item-name">Thiết lập hệ thống</span>
-        </div>
       </div>
     </nav>
   </div>
@@ -82,18 +35,18 @@
 export default {
   props: {
     customData: {
-    type: Array,
-    required: true,
+      type: Array,
+      required: true,
     },
   },
   data() {
     return {
       smallNav: false,
+      currentSelectedMenu: null,
+      currentHoverMenu: null,
     };
   },
-  created() {
-      console.log(this.customData);
-  },
+  created() {},
   methods: {
     toggleNav() {
       this.$emit("toggleNav");
@@ -103,19 +56,41 @@ export default {
      * Hàm lấy link router
      * NVTOAN 17/06/2021
      */
-    // getRouter(link) {
-    //     return link + '';
-    // }
+    getRouter(link) {
+      return link + "";
+    },
 
     /**
-     * Click nav-item
+     * Hàm xử lý sự kiện click nav-item
      * NVTOAN 17/06/2021
      */
-    click() {},
+    selectMenuItem(index) {
+      this.currentSelectedMenu = index;
+    },
+
+    /**
+     * Hàm xử lý sự kiện hover chuột vào nav-item
+     * NVTOAN 17/06/2021
+     */
+    hoverMenuItem(index) {
+      debugger; // eslint-disable-line no-debugger
+      this.currentHoverMenu = index;
+    },
+
+    /**
+     * Hàm xử lý sự kiện hover chuột vào nav-item
+     * NVTOAN 17/06/2021
+     */
+    unhoverMenuItem(e) {
+      e.target.classList.remove("nav__item-hover");
+    },
   },
 };
 </script>
 
 <style scoped>
 @import url("../../assets/css/common/navbar.css");
+.nav__list-item {
+    transition: .05s;
+}
 </style>

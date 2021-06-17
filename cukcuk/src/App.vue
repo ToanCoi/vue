@@ -33,27 +33,27 @@ export default {
         {
           iconClass: 'icon-report',
           itemName: 'Báo cáo',
-          routerLink: '/'
+          routerLink: ''
         },
         {
           iconClass: 'icon-setting',
           itemName: 'Mua hàng',
-          routerLink: '/'
+          routerLink: ''
         },
         {
           iconClass: 'icon-dic-employee',
           itemName: 'Danh mục nhân viên',
-          routerLink: '/'
+          routerLink: '/employee'
         },
         {
           iconClass: 'icon-dic-employee',
           itemName: 'Danh mục nhân viên',
-          routerLink: '/'
+          routerLink: ''
         },
         {
           iconClass: 'icon-setting',
           itemName: 'Thiết lập hệ thống',
-          routerLink: '/'
+          routerLink: ''
         },
       ]
     }
