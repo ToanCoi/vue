@@ -6,8 +6,8 @@
 </template>
 
 <script>
-import Header from './Header.vue'
-import Content from './Content.vue'
+import Header from './TheHeader.vue'
+import Content from './TheContent.vue'
 
 export default {
   components: {

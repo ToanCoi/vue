@@ -11,8 +11,8 @@
 </template>
 
 <script>
-import Navbar from "./components/layout/Navbar.vue";
-import Main from "./components/layout/Main.vue";
+import Navbar from "./components/layout/TheNavbar.vue";
+import Main from "./components/layout/TheMain.vue";
 import ToastMessenger from './components/common/ToastMessenger'
 
 export default {

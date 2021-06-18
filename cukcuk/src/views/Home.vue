@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    aldflkasdfjjskaljfasdkl
+    Đây là home, click Danh mục nhân viên
   </div>
 </template>
 
