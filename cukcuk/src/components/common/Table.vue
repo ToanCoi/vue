@@ -1,46 +1,55 @@
 <template>
-  <table>
-    <thead>
-      <tr>
-        <td
-          v-for="(item, index) in customData.column"
+  <div class="grid">
+    <table>
+      <thead>
+        <tr>
+          <td
+            v-for="(item, index) in customData.column"
+            :key="index"
+            :title="item.columnName"
+          >
+            {{ item.columnName }}
+          </td>
+        </tr>
+      </thead>
+      <tbody ref="tbody">
+        <tr
+          v-for="(item, index) in gridData"
+          :EmployeeId="item.EmployeeId"
           :key="index"
-          :title="item.columnName"
+          :class="{ 'tr-selected': selectRow(index) }"
+          @mouseenter="rowHover"
+          @mouseleave="rowUnhover"
+          @click.exact="rowClick(index)"
+          @dblclick="editItem(item)"
+          v-on:click.ctrl="multipleSelect(index)"
         >
-          {{ item.columnName }}
-        </td>
-      </tr>
-    </thead>
-    <tbody ref="tbody">
-      <tr
-        v-for="(item, index) in gridData"
-        :EmployeeId="item.EmployeeId"
-        :key="index"
-        :class="{ 'tr-selected': selectRow(index) }"
-        @mouseenter="rowHover"
-        @mouseleave="rowUnhover"
-        @click.exact="rowClick(index)"
-        @dblclick="editItem(item)"
-        v-on:click.ctrl="multipleSelect(index)"
-      >
-        <td
-          v-for="(col, index) in customData.column"
-          :key="index"
-          :title="
-            getDisplayValue(item[col.fieldName], col.dataType, col.enumName)
-          "
-        >
-          {{ getDisplayValue(item[col.fieldName], col.dataType, col.enumName) }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          <td
+            v-for="(col, index) in customData.column"
+            :key="index"
+            :title="
+              getDisplayValue(item[col.fieldName], col.dataType, col.enumName)
+            "
+          >
+            {{
+              getDisplayValue(item[col.fieldName], col.dataType, col.enumName)
+            }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <Paging :customData="paging" />
+  </div>
 </template>
 
 <script>
 import CommonFn from "../../js/common/CommonFn";
+import Paging from "./Paging.vue";
 
 export default {
+  components: {
+    Paging,
+  },
   props: {
     customData: {
       type: Object,
@@ -51,7 +60,17 @@ export default {
     return {
       currentSelectedRow: [],
       gridData: null,
+      paging: {
+        pageSize: this.customData.pageSize,
+        sumRecord: 0,
+        pageNum: 1,
+      },
     };
+  },
+  watch: {
+    paging: (val) => {
+      console.log(val);
+    },
   },
   created() {
     this.getDataServer();
@@ -126,12 +145,15 @@ export default {
      * Hàm lấy dữ liệu trên server
      * NVTOAN 16/06/2021
      */
-    getDataServer() {
+    async getDataServer() {
       this.$bus.emit("loader", true);
-      this.axios
+
+      await this.axios
         .get(this.customData.getDataUrl)
         .then((response) => {
+          //gán dữ liệu của bảng
           this.gridData = response.data;
+
           this.$bus.emit("loader", false);
         })
         .catch((error) => {
@@ -142,6 +164,19 @@ export default {
             toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
           });
         });
+
+      await this.getPagingData();
+    },
+
+    /**
+     * Hàm lấy dữ liệu cho paging
+     * NVTOAN 18/06/2021
+     */
+    getPagingData() {
+      //lấy tổng số bản ghi và chia số trang
+      this.paging.sumRecord = this.gridData.length;
+      this.paging.pageNum = this.paging.sumRecord / this.paging.pageSize;
+
     },
 
     /**
@@ -159,7 +194,8 @@ export default {
 
       this.$bus.emit("loader", true);
 
-      for (let i = 0; i < listId.length; i++) {console.log(this.customData.deleteDataUrl)
+      for (let i = 0; i < listId.length; i++) {
+        console.log(this.customData.deleteDataUrl);
         await this.axios
           .delete(this.customData.deleteDataUrl + listId[i])
           .then((response) => {
@@ -176,7 +212,7 @@ export default {
       }
 
       //Sau khi xóa xong thì gọi lại cha để xử lý
-      this.$emit('afterDelete');
+      this.$emit("afterDelete");
 
       //Reset đánh dấu select
       this.currentSelectedRow = [];
@@ -196,29 +232,29 @@ export default {
      * NVTOAN 18/06/2021
      */
     async filterData(filterValue) {
-      if(filterValue) {
+      if (filterValue) {
         await this.axios
-        .get(
-          "http://cukcuk.manhnv.net/v1/Employees/Filter?pageSize=" +
-            10 +
-            "&pageNumber=" +
-            2 +
-            "&fullName=" +
-            filterValue
-        )
-        .then((response) => {
+          .get(
+            "http://cukcuk.manhnv.net/v1/Employees/Filter?pageSize=" +
+              10 +
+              "&pageNumber=" +
+              2 +
+              "&fullName=" +
+              filterValue
+          )
+          .then((response) => {
             this.gridData = response.data.Data;
-            if(!this.gridData) {
-              this.$bus.emit('toast', {
-                toastType: 'warning',
-                toastMessage: "Không có dữ liệu hợp lệ"
+            if (!this.gridData) {
+              this.$bus.emit("toast", {
+                toastType: "warning",
+                toastMessage: "Không có dữ liệu hợp lệ",
               });
             }
-        });
+          });
       } else {
         this.getDataServer();
       }
-    }
+    },
   },
 };
 </script>

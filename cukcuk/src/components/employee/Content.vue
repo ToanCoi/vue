@@ -11,7 +11,7 @@
       @openForm="openForm"
       @afterDelete="closeDeletePopup"
     />
-    <Paging />
+    <!-- <Paging /> -->
     <Form ref="Form" @refreshData="refreshData" />
     <Popup ref="Popup" @deleteData="deleteData" :customData="deletePopup" />
   </div>
@@ -22,7 +22,7 @@ import HeaderContent from "./HeaderContent.vue";
 import ContentUtil from "./ContentUtil";
 import Table from "../common/Table.vue";
 import Form from "./Form.vue";
-import Paging from "./Paging.vue";
+// import Paging from "./Paging.vue";
 import Popup from "../common/Popup.vue";
 
 export default {
@@ -31,7 +31,7 @@ export default {
     HeaderContent,
     ContentUtil,
     Table,
-    Paging,
+    // Paging,
     Form,
     Popup,
   },
@@ -88,6 +88,7 @@ export default {
         ],
         getDataUrl: "http://cukcuk.manhnv.net/v1/Employees",
         deleteDataUrl: "http://cukcuk.manhnv.net/v1/Employees/",
+        pageSize: 4
       },
 
       deletePopup: {},
