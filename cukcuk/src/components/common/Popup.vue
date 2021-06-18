@@ -13,13 +13,12 @@
         </div>
         <div class="content-text text-label">
           Bạn có chắc muốn xóa
-          <b>{{ listItem.length }}</b> bản ghi
-          không?
+          <b>{{ numberOfItem }}</b> bản ghi không?
         </div>
       </div>
       <div class="popup__footer">
         <div class="btn btn-default" @click="isShow = false">Hủy</div>
-        <div class="btn btn-danger" @click="deleteItems">Xóa</div>
+        <div class="btn btn-danger" @click="confirmDelete">Xóa</div>
       </div>
     </div>
   </div>
@@ -36,33 +35,34 @@ export default {
   data() {
     return {
       isShow: false,
-      listItem: null,
+      numberOfItem: null,
     };
   },
   methods: {
     /**
      * Hàm mở pop up
+     * NVTOAN 17/06/2021
      */
-    open(listId) {
+    open(numberOfItem) {
       this.isShow = true;
-      this.listItem = listId;
+      this.numberOfItem = numberOfItem;
     },
 
     /**
-     * Hàm xóa tất cả bản ghi
+     * Đóng popup
+     * NVTOAN 18/06/2021
      */
-    deleteItems() {
-      this.$bus.emit("loader", true);
-      for (let i = 0; i < this.listItem.length; i++) {
-        this.axios
-          .delete("http://cukcuk.manhnv.net/v1/Employees/" + this.listItem[i])
-          .then((response) => {
-            console.log(response);
-          });
-      }
+    close() {
       this.isShow = false;
-      this.$emit("refreshData");
     },
+
+    /**
+     * Xác nhận xóa
+     * NVTOAN 18/06/2021
+     */
+    confirmDelete() {
+      this.$emit('deleteData');
+    }
   },
 };
 </script>

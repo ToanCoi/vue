@@ -17,7 +17,7 @@
         >
           <i class="fas fa-times fa-xs"></i>
         </div>
-      </div>
+      </div>  
       <div class="dropdown__icon-arrow" :class="{ 'rotate-180': isShow }">
         <i class="fas fa-chevron-down fa-xs"></i>
       </div>

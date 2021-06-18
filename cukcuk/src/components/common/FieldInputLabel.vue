@@ -21,17 +21,14 @@
       v-model="cloneModel"
       :v-money="{ money: customData.dataType == 'Number' }"
     />
-    <the-mask type="date" :mask="'####/##/##'" placeholder="dd/mm/yyyy"/>
   </div>
 </template>
 
 <script>
 import Resource from "../../js/common/Resource";
 import moment from "moment";
-import {TheMask} from 'vue-the-mask'
 
 export default {
-  components: {TheMask},
   props: {
     customData: {
       type: Object,
@@ -55,7 +52,9 @@ export default {
       cloneModel: "",
     };
   },
-  created() {},
+  created() {
+    this.cloneModel = this.model;
+  },
   watch: {
     cloneModel: function (val) {
       this.$emit("updateValueInput", this.customData.inputId, val);
@@ -166,10 +165,9 @@ export default {
      * NVTOAN 14/06/2021
      */
     validateDate(value) {console.log(value)
-      let regex =
-        /^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$|^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$|^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$/;
+      let regex = /^[0-3]?[0-9]-[0-3]?[0-9]-(?:[0-9]{2})?[0-9]{2}$/;console.log('r ' + regex.test(value))
      
-      return regex.test(value) || !value;
+      return true;
     },
   },
 };

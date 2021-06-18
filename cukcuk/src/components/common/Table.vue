@@ -13,13 +13,13 @@
     </thead>
     <tbody ref="tbody">
       <tr
-        v-for="(item, index) in customData.data"
+        v-for="(item, index) in gridData"
         :EmployeeId="item.EmployeeId"
         :key="index"
         :class="{ 'tr-selected': selectRow(index) }"
         @mouseenter="rowHover"
         @mouseleave="rowUnhover"
-        @click.exact="rowClick(index)"    
+        @click.exact="rowClick(index)"
         @dblclick="editItem(item)"
         v-on:click.ctrl="multipleSelect(index)"
       >
@@ -50,7 +50,11 @@ export default {
   data() {
     return {
       currentSelectedRow: [],
+      gridData: null,
     };
+  },
+  created() {
+    this.getDataServer();
   },
   methods: {
     /**
@@ -111,19 +115,110 @@ export default {
     },
 
     /**
-     * Hàm lấy ra tất cả nhân viên đang được chọn
+     * Hàm lấy ra số lượng item đang được chọn để hiện lên thông báo
      * NVTOAN 17/06/2021
      */
-    getSelectedEmployees() {
+    getNumberSelectedItem() {
+      return this.currentSelectedRow.length;
+    },
+
+    /**
+     * Hàm lấy dữ liệu trên server
+     * NVTOAN 16/06/2021
+     */
+    getDataServer() {
+      this.$bus.emit("loader", true);
+      this.axios
+        .get(this.customData.getDataUrl)
+        .then((response) => {
+          this.gridData = response.data;
+          this.$bus.emit("loader", false);
+        })
+        .catch((error) => {
+          console.log(error);
+
+          this.$bus.emit("toast", {
+            toastType: "danger",
+            toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
+          });
+        });
+    },
+
+    /**
+     * Hàm xóa tất cả bản ghi
+     * NVTOAN 17/06/2021
+     */
+    async deleteItems() {
       let listId = [],
         rows = this.$refs.tbody.querySelectorAll(".tr-selected");
 
+      //Lấy tất cả id của row đang được chọn
       for (let i = 0; i < rows.length; i++) {
         listId.push(rows[i].getAttribute("EmployeeId"));
       }
 
-      return listId;
+      this.$bus.emit("loader", true);
+
+      for (let i = 0; i < listId.length; i++) {console.log(this.customData.deleteDataUrl)
+        await this.axios
+          .delete(this.customData.deleteDataUrl + listId[i])
+          .then((response) => {
+            console.log(response);
+          })
+          .catch((error) => {
+            console.log(error);
+
+            this.$bus.emit("toast", {
+              toastType: "danger",
+              toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
+            });
+          });
+      }
+
+      //Sau khi xóa xong thì gọi lại cha để xử lý
+      this.$emit('afterDelete');
+
+      //Reset đánh dấu select
+      this.currentSelectedRow = [];
+
+      //refresh dữ liệu
+      await this.getDataServer();
+
+      //gọi toast thông báo
+      await this.$bus.emit("toast", {
+        toastType: "success",
+        toastMessage: "Xóa dữ liệu thành công",
+      });
     },
+
+    /**
+     * Hàm filter data
+     * NVTOAN 18/06/2021
+     */
+    async filterData(filterValue) {
+      if(filterValue) {
+        await this.axios
+        .get(
+          "http://cukcuk.manhnv.net/v1/Employees/Filter?pageSize=" +
+            10 +
+            "&pageNumber=" +
+            2 +
+            "&fullName=" +
+            filterValue
+        )
+        .then((response) => {
+            this.gridData = response.data.Data;
+            if(!this.gridData) {
+              this.$bus.emit('toast', {
+                toastType: 'warning',
+                toastMessage: "Không có dữ liệu hợp lệ"
+              });
+            }
+        });
+      } else {
+        this.getDataServer();
+      }
+    }
   },
 };
 </script>

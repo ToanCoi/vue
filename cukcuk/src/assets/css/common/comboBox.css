@@ -1,0 +1,132 @@
+/* comboBox */
+.comboBox {
+    width: calc(var(--column-width) * 2.5);
+    position: relative;
+    outline: none;
+}
+
+.comboBox:focus-visible .comboBox__btn {
+    border: 1px solid #019160;
+}
+
+.comboBox__btn {
+    width: 100%;
+    background-color: #fff;
+    border: 1px solid #bbb;
+    border-radius: 4px;
+    height: 40px;
+    color: #000;
+    font-size: 13px;
+    font-family: 'GoogleSans-regular';
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    cursor: pointer;
+}
+
+.comboBox__btn-focus {
+    border: 1px solid #019160;
+}
+
+.comboBox__btn-left {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: calc(100% - 20px);
+    margin-left: 16px;
+    height: 100%;
+    margin-right: 8px;
+}
+
+.comboBox__content {
+    height: 100%;
+    width: 100%;
+}
+
+.comboBox__text {
+    width: 100%;
+    height: 100%;
+    outline: none;
+    border: none;
+}
+
+.comboBox__icon-unselect {
+    background-color: rgba(0, 0, 0, 0.03);
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    color: #bbb;
+    transition: 0s;
+}
+
+.comboBox__icon-unselect:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+    color: rgba(0, 0, 0, 0.6);
+}
+
+.comboBox__icon-arrow {
+    font-size: 16px;
+    padding: 0 12px;
+    border-left: 1px solid #d2d2d2;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 0 4px 0 0;
+}
+
+.comboBox__icon-arrow:hover {
+    background-color: #e9ebee;
+}
+
+.comboBox__icon-arrow-active {
+    background-color: #e9ebee;
+}
+
+.arrow-icon {
+    width: 16px;
+    height: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.comboBox__list {
+    position: absolute;
+    width: 100%;
+    font-size: 13px;
+    font-family: 'GoogleSans-regular';
+    background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.04);
+    border-radius: 4px;
+    padding: 3px 0px;
+    z-index: 100;
+}
+
+.comboBox__list-item {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    background-color: #fff;
+    cursor: pointer;
+    transition: .1s;
+}
+
+.comboBox__item-hover {
+    background-color: #e9ebee;
+}
+
+.comboBox__item-selected {
+    background-color: #019160;
+    color: #fff;
+}
+
+.comboBox__item-icon {
+    padding: 0px 10px;
+    opacity: 0;
+}
