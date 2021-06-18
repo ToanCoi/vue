@@ -2,7 +2,7 @@
   <div class="popup__wrapper" v-if="isShow">
     <div class="popup">
       <div class="popup__header">
-        <div class="header-title text-title2">Đóng form thông tin chung</div>
+        <div class="header-title text-title2">Xóa nhân viên</div>
         <div class="header-cancel" @click="isShow = false">
           <div class="cancel-icon"></div>
         </div>
