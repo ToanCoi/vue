@@ -21,14 +21,34 @@
       v-model="cloneModel"
       :v-money="{ money: customData.dataType == 'Number' }"
     />
+    <DateBox/>
   </div>
 </template>
 
 <script>
 import Resource from "../../js/common/Resource";
 import moment from "moment";
+// import DateBox from "devextreme-vue/date_box";
+
+// You can create the DateBox widget using the following code.
+// Read more at https://js.devexpress.com/Documentation/Guide/Widgets/Common/Advanced/3rd-Party_Frameworks_Integration_API/#Create_and_Configure_a_Widget.
+
+// new DateBox(this, {
+//     "dateOutOfRangeMessage": "Ngày nhập không hợp lệ",
+//     "displayFormat": "dd/MM/yyyy",
+//     "height": "40px",
+//     "hint": "",
+//     "invalidDateMessage": "Ngày nhập không hợp lệ",
+//     "opened": true,
+//     "placeholder": "dd/mm/yyyy",
+//     "useMaskBehavior": true
+// });
+
 
 export default {
+  // components: {
+  //   DateBox
+  // },
   props: {
     customData: {
       type: Object,
