@@ -1,8 +1,8 @@
 <template>
   <div class="content">
     <HeaderContent
-      v-on:openForm="openForm"
-      v-on:openFormDelete="openDeletePopup"
+      @openForm="openForm"
+      @openFormDelete="openDeletePopup"
     />
     <ContentUtil @refreshData="refreshData" @filterTable="filterTable" />
     <Table
@@ -10,6 +10,7 @@
       :customData="employeeTable"
       @openForm="openForm"
       @afterDelete="closeDeletePopup"
+      @clickPageNum="clickPageNum"
     />
     <!-- <Paging /> -->
     <Form ref="Form" @refreshData="refreshData" />
@@ -22,8 +23,8 @@ import HeaderContent from "./HeaderContent.vue";
 import ContentUtil from "./ContentUtil";
 import Table from "../common/Table.vue";
 import Form from "./Form.vue";
-// import Paging from "./Paging.vue";
 import Popup from "../common/Popup.vue";
+import EmployeesAPI from '../../api/components/employees/EmployeesAPI'
 
 export default {
   name: "Employee",
@@ -31,7 +32,6 @@ export default {
     HeaderContent,
     ContentUtil,
     Table,
-    // Paging,
     Form,
     Popup,
   },
@@ -86,18 +86,70 @@ export default {
             enumName: "WorkStatus",
           },
         ],
-        getDataUrl: "http://cukcuk.manhnv.net/v1/Employees",
-        deleteDataUrl: "http://cukcuk.manhnv.net/v1/Employees/",
-        pageSize: 4
+        gridData: null,
+        pageSize: 4,
+        sumPageNum: 1,
+        sumRecord: 0,
       },
 
       deletePopup: {},
     };
   },
-  created() {},
+  async created() {
+    await this.getDataServer();
+  },
   methods: {
+    
     /**
-     * Hàm mở form
+     * Hàm lấy dữ liệu trên server
+     * NVTOAN 16/06/2021
+     */
+    async getDataServer() {
+        this.$bus.emit('loader', true);
+
+        await EmployeesAPI.getAll().then((response) => {
+          this.employeeTable.sumRecord = response.data.length;
+
+          //tìm tổng số trang / pageSize
+          this.employeeTable.sumPageNum = Math.ceil(this.employeeTable.sumRecord / this.employeeTable.pageSize);
+        });
+
+        await EmployeesAPI.filter(this.employeeTable.pageSize, 1, 'n')
+        .then((response) => {
+            this.employeeTable.gridData = response.data.Data; 
+
+        });
+
+        this.$bus.emit('loader', false);
+    },
+
+    /**
+     * Hàm chuyển trang theo click người dùng
+     * NVTOAN 20/06/2021
+     */
+    async clickPageNum(index) {
+        let realPageSize = this.employeeTable.pageSize;
+        
+        this.$bus.emit('loader', true);
+
+        await EmployeesAPI.getAll().then((response) => {
+          this.employeeTable.sumRecord = response.data.length;
+
+          //tìm tổng số trang / pageSize
+          this.employeeTable.sumPageNum = Math.ceil(this.employeeTable.sumRecord / this.employeeTable.pageSize);
+        });
+
+        await EmployeesAPI.filter(realPageSize, index, 'n')
+        .then((response) => {
+            this.employeeTable.gridData = response.data.Data; 
+
+        });
+
+        this.$bus.emit('loader', false);
+    },
+
+    /**
+     * Hàm mở form thêm sửa
      * NVTOAN 14/06/2021
      */
     openForm(employee) {

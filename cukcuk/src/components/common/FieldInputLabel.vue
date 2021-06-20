@@ -21,7 +21,6 @@
       v-model="cloneModel"
       :v-money="{ money: customData.dataType == 'Number' }"
     />
-    <DateBox/>
   </div>
 </template>
 

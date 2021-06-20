@@ -16,6 +16,11 @@
     cursor: pointer;
 }
 
+.paging-item:active {
+    background-color: #019160;
+    color: white;
+}
+
 .page-direction {
     display: flex;
     justify-content: center;
@@ -57,7 +62,7 @@
     background-color: rgba(0, 0, 0, 0.1);
 }
 
-.paging-item-select {
+.paging-item-selected {
     background-color: #019160;
     color: white;
 }

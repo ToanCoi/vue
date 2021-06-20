@@ -12,12 +12,11 @@
           :to="getRouter(item.routerLink)"
           class="nav__list-item text-label"
           :class="{
-            'nav__item-selected': currentSelectedMenu == index,
+            'nav__item-selected': item.routerLink == $route.path,
             'nav__item-hover':
-              currentHoverMenu != currentSelectedMenu &&
+              item.routerLink != $route.path &&
               index == currentHoverMenu,
           }"
-          @click.native="selectMenuItem(index)"
           @mouseenter.native="hoverMenuItem(index)"
           @mouseleave.native="unhoverMenuItem"
         >
@@ -42,7 +41,6 @@ export default {
   data() {
     return {
       smallNav: false,
-      currentSelectedMenu: null,
       currentHoverMenu: null,
     };
   },
@@ -58,14 +56,6 @@ export default {
      */
     getRouter(link) {
       return link + "";
-    },
-
-    /**
-     * Hàm xử lý sự kiện click nav-item
-     * NVTOAN 17/06/2021
-     */
-    selectMenuItem(index) {
-      this.currentSelectedMenu = index;
     },
 
     /**

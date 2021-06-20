@@ -3,35 +3,45 @@
     <div class="paging__left">
       <span class="left__text">{{
         "Hiển thị 1-" +
-        pageSize +
+        this.customData.pageSize +
         "/" +
-        sumRecord +
-        "nhân viên"
+        this.customData.sumRecord +
+        " nhân viên"
       }}</span>
     </div>
-    <div class="paging__center">
-      <div class="paging-item page-direction">
+    <div ref="Direction" class="paging__center">
+      <div class="paging-item page-direction" @click="clickFirstPage">
         <div class="paging-icon first-page__icon"></div>
       </div>
-      <div class="paging-item page-direction">
+      <div class="paging-item page-direction" @click="clickPreviousPage">
         <div class="paging-icon pre-page__icon"></div>
       </div>
       <div
         class="paging-item page__num"
-        v-for="(item, index) in pageNum"
+        v-for="index in this.customData.sumPageNum"
         :key="index"
+        :class="{
+          'paging-item-selected': index == currentSelectedPageNum,
+          'paging-item-hover':
+            index != currentSelectedPageNum && index == currentHoverPageNum,
+        }"
+        @mouseenter="hoverPageNum(index)"
+        @mouseleave="unhoverPageNum"
+        @click="clickPageNum(index)"
       >
-        <span>{{ index + 1 }}</span>
+        <span>{{ index }}</span>
       </div>
-      <div class="paging-item page-direction">
+      <div class="paging-item page-direction" @click="clickNextPage">
         <div class="paging-icon next-page__icon"></div>
       </div>
-      <div class="paging-item page-direction">
+      <div class="paging-item page-direction" @click="clickLastPage">
         <div class="paging-icon last-page__icon"></div>
       </div>
     </div>
     <div class="paging__right">
-      <span class="rigt__text">{{ pageSize }} nhân viên/trang</span>
+      <span class="rigt__text"
+        >{{ this.customData.pageSize }} nhân viên/trang</span
+      >
     </div>
   </div>
 </template>
@@ -45,27 +55,98 @@ export default {
     },
   },
   data() {
-      return {
-          pageSize: 0,
-          pageNum: 1,
-          sumRecord: 0
-      }
+    return {
+      currentSelectedPageNum: 1,
+      currentHoverPageNum: null,
+    };
   },
-  created() {
-    this.pageSize = this.customData.pageSize;
-    this.pageNum = this.customData.pageNum;
-    this.sumRecord = this.customData.sumRecord;
+  mounted() {
+    this.handlerHover();
   },
-  watch: {
-      customData: function(val){
-          this.pageSize = val.pageSize;
-          this.pageNum = val.pageNum;
-          this.sumRecord = val.sumRecord;
-      }
-  }
+  methods: {
+    /**
+     * Hàm xử lý sự kiên khi hover vào các nút định hướng trên paging
+     * NVTOAN 20/06/2021
+     */
+    handlerHover() {
+
+      this.$refs.Direction.getElementsByClassName("paging-item").forEach(
+        (element) => {
+          element.onmouseenter = () => {
+            element.classList.add("paging-item-hover");
+          };
+
+          element.onmouseleave = () => {
+            element.classList.remove("paging-item-hover");
+          };
+        }
+      );
+    },
+
+    /**
+     * Hàm khi hover và pageNum
+     * NVTOAN 20/06/2021
+     */
+    hoverPageNum(index) {
+      this.currentHoverPageNum = index;
+    },
+
+    /**
+     * Hàm khi hover và pageNum
+     * NVTOAN 20/06/2021
+     */
+    unhoverPageNum() {
+      this.currentHoverPageNum = null;
+    },
+
+    /**
+     * Hàm khi hover và pageNum
+     * NVTOAN 20/06/2021
+     */
+    clickPageNum(index) {
+      this.currentSelectedPageNum = index;
+      this.$emit('clickPageNum', index);
+    },
+
+    /**
+     * Hàm xử lý khi ấn first page
+     * NVTOAN 20/06/2021
+     */
+    clickFirstPage() {
+      this.currentSelectedPageNum = 1;
+    },
+
+    /**
+     * Hàm xử lý khi ấn previous page
+     * NVTOAN 20/06/2021
+     */
+    clickPreviousPage() {
+
+    },
+
+    /**
+     * Hàm xử lý khi ấn next page
+     * NVTOAN 20/06/2021
+     */
+    clickNextPage() {
+
+    },
+    
+    /**
+     * Hàm xử lý khi ấn last page
+     * NVTOAN 20/06/2021
+     */
+    clickLastPage() {
+
+    }
+  },
 };
 </script>
 
 <style scoped>
 @import url("../../assets/css/common/paging.css");
+
+.paging-item {
+  transition: 0.1s;
+}
 </style>

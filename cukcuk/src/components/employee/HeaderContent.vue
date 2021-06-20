@@ -27,13 +27,16 @@
 export default {
     methods: {
         /**
-         * Hàm gọi cha mở form thêm
+         * Hàm gọi cha mở form thêm sửa
          * NVTOAN 13/06/2021
          */
         openForm() {
             this.$emit('openForm', null);
         },
 
+        /**
+         * Hàm gọi cha mở form xóa
+         */
         openFormDelete() {
             this.$emit('openFormDelete', null)
         }

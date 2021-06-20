@@ -14,7 +14,7 @@
       </thead>
       <tbody ref="tbody">
         <tr
-          v-for="(item, index) in gridData"
+          v-for="(item, index) in customData.gridData"
           :EmployeeId="item.EmployeeId"
           :key="index"
           :class="{ 'tr-selected': selectRow(index) }"
@@ -38,7 +38,7 @@
         </tr>
       </tbody>
     </table>
-    <Paging :customData="paging" />
+    <Paging :customData="paging" @clickPageNum="clickPageNum"/>
   </div>
 </template>
 
@@ -59,21 +59,22 @@ export default {
   data() {
     return {
       currentSelectedRow: [],
-      gridData: null,
       paging: {
         pageSize: this.customData.pageSize,
-        sumRecord: 0,
-        pageNum: 1,
+        sumRecord: this.customData.sumRecord,
+        sumPageNum: this.customData.sumPageNum,
       },
     };
   },
   watch: {
-    paging: (val) => {
-      console.log(val);
+    customData: {
+      deep: true,
+      handler(val) {
+        this.paging.pageSize = val.pageSize;
+        this.paging.sumRecord = val.sumRecord;
+        this.paging.sumPageNum = val.sumPageNum;
+      }
     },
-  },
-  created() {
-    this.getDataServer();
   },
   methods: {
     /**
@@ -142,41 +143,11 @@ export default {
     },
 
     /**
-     * Hàm lấy dữ liệu trên server
-     * NVTOAN 16/06/2021
+     * Hàm gọi cha để chuyển trang được click
+     * NVTOAN 20/06/2021
      */
-    async getDataServer() {
-      this.$bus.emit("loader", true);
-
-      await this.axios
-        .get(this.customData.getDataUrl)
-        .then((response) => {
-          //gán dữ liệu của bảng
-          this.gridData = response.data;
-
-          this.$bus.emit("loader", false);
-        })
-        .catch((error) => {
-          console.log(error);
-
-          this.$bus.emit("toast", {
-            toastType: "danger",
-            toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
-          });
-        });
-
-      await this.getPagingData();
-    },
-
-    /**
-     * Hàm lấy dữ liệu cho paging
-     * NVTOAN 18/06/2021
-     */
-    getPagingData() {
-      //lấy tổng số bản ghi và chia số trang
-      this.paging.sumRecord = this.gridData.length;
-      this.paging.pageNum = this.paging.sumRecord / this.paging.pageSize;
-
+    clickPageNum(index) {
+      this.$emit('clickPageNum', index);
     },
 
     /**
@@ -231,30 +202,30 @@ export default {
      * Hàm filter data
      * NVTOAN 18/06/2021
      */
-    async filterData(filterValue) {
-      if (filterValue) {
-        await this.axios
-          .get(
-            "http://cukcuk.manhnv.net/v1/Employees/Filter?pageSize=" +
-              10 +
-              "&pageNumber=" +
-              2 +
-              "&fullName=" +
-              filterValue
-          )
-          .then((response) => {
-            this.gridData = response.data.Data;
-            if (!this.gridData) {
-              this.$bus.emit("toast", {
-                toastType: "warning",
-                toastMessage: "Không có dữ liệu hợp lệ",
-              });
-            }
-          });
-      } else {
-        this.getDataServer();
-      }
-    },
+    // async filterData(filterValue) {
+    //   if (filterValue) {
+    //     await this.axios
+    //       .get(
+    //         "http://cukcuk.manhnv.net/v1/Employees/Filter?pageSize=" +
+    //           10 +
+    //           "&pageNumber=" +
+    //           2 +
+    //           "&fullName=" +
+    //           filterValue
+    //       )
+    //       .then((response) => {
+
+    //         if (!this.gridData) {
+    //           this.$bus.emit("toast", {
+    //             toastType: "warning",
+    //             toastMessage: "Không có dữ liệu hợp lệ",
+    //           });
+    //         }
+    //       });
+    //   } else {
+    //     this.getDataServer();
+    //   }
+    // },
   },
 };
 </script>

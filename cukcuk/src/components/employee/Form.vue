@@ -177,6 +177,7 @@
 </template>
 
 <script>
+import EmployeesAPI from '../../api/components/employees/EmployeesAPI'
 /**
  * Hàm khởi tạo giá trị cho form
  * NVTOAN 14/06/2021
@@ -301,27 +302,28 @@ export default {
      * NVTOAN 13/06/2021
      */
     async openForm(employeeId) {
+
       //Gán lại giá trị của form
       await Object.assign(this.$data, initState());
+
       //Nếu là form sửa
       if (employeeId.length > 0) {
         this.getEmployeeById(employeeId);
         this.id = employeeId;
       } else {
-        await this.axios
-          .get("http://cukcuk.manhnv.net/v1/Employees/NewEmployeeCode")
+        await EmployeesAPI.getNewEmployeeCode()
           .then((response) => {
-            this.employee.EmployeeCode = response.data;console.log(this.employee.EmployeeCode)
+              this.employee.EmployeeCode = response.data;
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(() => {
 
             this.$bus.emit("toast", {
               toastType: "danger",
-              toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
+              toastMessage: "Có lỗi khi lấy mã nhân viên mới, vui lòng liên hệ MISA",
             });
           });
       }
+
       this.showForm = true;
     },
 
@@ -332,19 +334,17 @@ export default {
     getEmployeeById(employeeId) {
       console.log(employeeId);
 
-      this.axios
-        .get("http://cukcuk.manhnv.net/v1/Employees/" + employeeId)
-        .then((response) => {
-          this.employee = response.data;
-        })
-        .catch((error) => {
-          console.log(error);
 
-          this.$bus.emit("toast", {
-            toastType: "danger",
-            toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
-          });
+      EmployeesAPI.getById(employeeId).then((response) => {
+        this.employee = response.data;
+      })
+      .catch(() => {
+
+        this.$bus.emit("toast", {
+          toastType: "danger",
+          toastMessage: "Không thể sửa dữ liệu, vui lòng liên hệ MISA",
         });
+      });
     },
 
     updateValueInput(key, value) {
@@ -382,35 +382,27 @@ export default {
 
       if (this.allInputValid) {
         if (!this.id) {
-          await this.axios
-            .post("http://cukcuk.manhnv.net/v1/Employees/", this.employee)
-            .then((response) => {
+          await EmployeesAPI.insert(this.employee).then((response) => {
               console.log(response);
             })
-            .catch((error) => {
-              console.log(error);
+            .catch(() => {
+
               me.showForm = false;
               this.$bus.emit("toast", {
                 toastType: "danger",
-                toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
+                toastMessage: "Không thể thêm, vui lòng liên hệ MISA",
               });
             });
         } else {
-          await this.axios
-            .put(
-              "http://cukcuk.manhnv.net/v1/Employees/" + this.id,
-              this.employee
-            )
-            .then((response) => {
-              console.log(response);
-            })
-            .catch((error) => {
-              console.log(error);
+          await EmployeesAPI.update(this.id, this.employee)
+            .catch(() => {
               me.showForm = false;
+
               this.$bus.emit("toast", {
                 toastType: "danger",
-                toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
+                toastMessage: "Không thể sửa dữ liệu, vui lòng liên hệ MISA",
               });
+
             });
         }
         await this.closeForm();
