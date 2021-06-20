@@ -2,8 +2,8 @@
     <div class="content__util">
         <div class="util__left">
             <FieldInputIcon :customData="searchBox"/>
-            <Dropdown :customData="departmentDropdown"/>
-            <Dropdown :customData="positionDropdown"/>
+            <ComboBox :customData="departmentComboBox"/>
+            <ComboBox :customData="positionComboBox"/>
         </div>   
         <div class="util__right btn btn-default" @click="refreshData">
             <div class="btn-refresh"></div>
@@ -19,15 +19,15 @@ export default {
                 iconClass: "search-box__icon",
                 placeholder: "Tìm theo Mã, Tên hoặc Số điện thoại"
             },
-            departmentDropdown: {
+            departmentComboBox: {
                 defaultValue: "Tất cả phòng ban",
                 items: ["Phòng nhân sự", "Phòng kế toán", "Phòng kinh doanh"],
-                width: 2.8
+                width: 3
             },
-            positionDropdown: {
+            positionComboBox: {
                 defaultValue: "Tất cả vị trí",
                 items: ["Nhân viên", "Giám đốc", "Trưởng phòng"],
-                width: 2.8
+                width: 3
             }
         }
     },
@@ -40,4 +40,7 @@ export default {
 </script>
 
 <style scoped>
+.comboBox {
+    margin-left: 24px;
+}
 </style>

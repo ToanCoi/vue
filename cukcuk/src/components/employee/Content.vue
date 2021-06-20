@@ -9,12 +9,31 @@
       ref="Table"
       :customData="employeeTable"
       @openForm="openForm"
-      @afterDelete="closeDeletePopup"
-      @clickPageNum="clickPageNum"
+      @clickPageNum="getDataServer"
     />
     <!-- <Paging /> -->
-    <Form ref="Form" @refreshData="refreshData" />
-    <Popup ref="Popup" @deleteData="deleteData" :customData="deletePopup" />
+    <Form ref="Form" @refreshData="refreshData" @openConfirmCancelPopup="openConfirmCancelPopup"/>
+    <CautionPopup ref="DeletePopup" :customData="deletePopup" @confirmPopup="deleteSelectedEmployees">
+      <template scope="props">
+        <span>
+            Bạn có chắc muốn xóa <b>{{ props.emphasizeText }}</b> bản ghi không?
+        </span>
+      </template>
+    </CautionPopup>
+    <CautionPopup ref="CancelEditPopup" :customData="cancelEditPopup" @confirmPopup="cancelEditEmployees">
+      <template>
+        <span>
+            Thông tin nhân viên bạn đang sửa chưa được lưu, bạn có chắc muốn đóng form không?
+        </span>
+      </template>
+    </CautionPopup>
+    <CautionPopup ref="CancelAddPopup" :customData="cancelAddPopup" @confirmPopup="cancelAddEmployees">
+      <template>
+        <span>
+            Bạn chưa lưu thông tin nhân viên, bạn có chắc muốn đóng form không?
+        </span>
+      </template>
+    </CautionPopup>
   </div>
 </template>
 
@@ -23,8 +42,9 @@ import HeaderContent from "./HeaderContent.vue";
 import ContentUtil from "./ContentUtil";
 import Table from "../common/Table.vue";
 import Form from "./Form.vue";
-import Popup from "../common/Popup.vue";
+import CautionPopup from '../common/popup/CautionPopup.vue'
 import EmployeesAPI from '../../api/components/employees/EmployeesAPI'
+import Resource from '../../js/common/Resource'
 
 export default {
   name: "Employee",
@@ -33,7 +53,8 @@ export default {
     ContentUtil,
     Table,
     Form,
-    Popup,
+    CautionPopup
+    // Popup,
   },
   data() {
     return {
@@ -87,71 +108,57 @@ export default {
           },
         ],
         gridData: null,
+        idFieldName: "EmployeeId",
         pageSize: 4,
         sumPageNum: 1,
         sumRecord: 0,
       },
 
-      deletePopup: {},
+      deletePopup: {
+        title: "Xóa nhân viên",
+        iconColorClass: "icon-danger",
+        cancelBtnClass: "btn-default",
+        cancelBtnText: "Hủy",
+        confirmBtnClass: "btn-danger",
+        confirmBtnText: "Xóa",
+        emphasizeText: "",
+      },
+      cancelEditPopup: {
+        title: "Đóng Form sửa nhân viên",
+        iconColorClass: "icon-warning",
+        cancelBtnClass: "btn-default",
+        cancelBtnText: "Tiếp tục sửa",
+        confirmBtnClass: "btn-primary",
+        confirmBtnText: "Đóng",
+      },
+      cancelAddPopup: {
+        title: "Đóng Form thêm nhân viên",
+        iconColorClass: "icon-warning",
+        cancelBtnClass: "btn-default",
+        cancelBtnText: "Tiếp tục nhập",
+        confirmBtnClass: "btn-primary",
+        confirmBtnText: "Đóng",
+      }
     };
   },
   async created() {
-    await this.getDataServer();
+    await this.getDataServer(1);
   },
   methods: {
     
     /**
-     * Hàm lấy dữ liệu trên server
+     * Hàm lấy dữ liệu trên server, truyền vào page number
      * NVTOAN 16/06/2021
      */
-    async getDataServer() {
+    async getDataServer(index) {
         this.$bus.emit('loader', true);
 
-        await EmployeesAPI.getAll().then((response) => {
-          this.employeeTable.sumRecord = response.data.length;
-
-          //tìm tổng số trang / pageSize
-          this.employeeTable.sumPageNum = Math.ceil(this.employeeTable.sumRecord / this.employeeTable.pageSize);
-        });
-
-        await EmployeesAPI.filter(this.employeeTable.pageSize, 1, 'n')
+        await EmployeesAPI.filter(this.employeeTable.pageSize, index -  1, 'n')
         .then((response) => {
+
             this.employeeTable.gridData = response.data.Data; 
-
-        });
-
-        this.$bus.emit('loader', false);
-    },
-
-    /**
-     * Hàm chuyển trang theo click người dùng
-     * NVTOAN 20/06/2021
-     */
-    async clickPageNum(index) {
-        let realPageSize = this.employeeTable.pageSize,
-            realPageNum =  index;
-        
-        this.$bus.emit('loader', true);
-
-        await EmployeesAPI.getAll().then((response) => {
-          this.employeeTable.sumRecord = response.data.length;
-
-          //tìm tổng số trang / pageSize
-          this.employeeTable.sumPageNum = Math.ceil(this.employeeTable.sumRecord / this.employeeTable.pageSize);
-        });
-
-        //Nếu số dư số nhân viên
-        if(realPageSize * realPageNum > this.employeeTable.sumRecord) {
-
-          realPageSize = this.employeeTable.sumRecord  % this.employeeTable.sumPageNum;
-          
-          realPageNum = Math.ceil(this.employeeTable.sumRecord / realPageSize);
-        }
-
-        await EmployeesAPI.filter(realPageSize, realPageNum - 1, 'n')
-        .then((response) => {
-            this.employeeTable.gridData = response.data.Data; 
-
+            this.employeeTable.sumRecord = response.data.TotalRecord;
+            this.employeeTable.sumPageNum = response.data.TotalPage;
         });
 
         this.$bus.emit('loader', false);
@@ -176,7 +183,8 @@ export default {
     openDeletePopup() {
       let numberOfItem = this.$refs.Table.getNumberSelectedItem();
 
-      this.$refs.Popup.open(numberOfItem);
+      this.deletePopup.emphasizeText = numberOfItem;
+      this.$refs.DeletePopup.open();
     },
 
     /**
@@ -184,7 +192,37 @@ export default {
      * NVTOAN 18/06/2021
      */
     closeDeletePopup() {
-      this.$refs.Popup.close();
+      this.$refs.DeletePopup.close();
+    },
+
+    /**
+     * Hàm mở form confirm cancel tương ứng
+     * NVTOAN 20/06/2021
+     */
+    openConfirmCancelPopup(formType) {
+      if(formType == Resource.FormType.Add) {
+        this.$refs.CancelAddPopup.open();
+      } else if(formType == Resource.FormType.Edit) {
+        this.$refs.CancelEditPopup.open();
+      }
+    },
+
+    /**
+     * Hàm xử lý khi xác nhận đóng form sửa
+     * NVTOAN 20/06/2021
+     */
+    cancelEditEmployees() {
+      this.$refs.CancelEditPopup.close();
+      this.$refs.Form.confirmCloseForm();
+    },
+
+    /**
+     * Hàm xử lý khi xác nhận đóng form thêm
+     * NVTOAN 20/06/2021
+     */
+    cancelAddEmployees() {
+      this.$refs.CancelAddPopup.close();
+      this.$refs.Form.confirmCloseForm();
     },
 
     /**
@@ -192,15 +230,40 @@ export default {
      * NVTOAN 18/06/2021
      */
     refreshData() {
-      this.$refs.Table.getDataServer();
+      this.getDataServer(1);
+      this.$refs.Table.refreshData();
     },
 
     /**
      * Hàm gọi table xóa dữ liệu đang được chọn
      * NVTOAN 18/06/2021
      */
-    deleteData() {
-      this.$refs.Table.deleteItems();
+    async deleteSelectedEmployees() {
+      //Lấy id của tất cả nhân viên đang được chọn
+      let listId = this.$refs.Table.getListIdSelectedItem();
+
+      this.$bus.emit("loader", true);
+
+      for (let i = 0; i < listId.length; i++) {
+        await EmployeesAPI.delete(listId[i]).catch(() => {
+
+            this.$bus.emit("toast", {
+              toastType: "danger",
+              toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
+            });
+          });
+      }
+
+      this.$refs.DeletePopup.close();
+
+      this.$bus.emit('loader', false);
+
+      this.$bus.emit('toast', {
+        toastType: "success",
+        toastMessage: "Xóa dữ liệu thành công"
+      });
+
+      this.refreshData();
     },
 
     /**

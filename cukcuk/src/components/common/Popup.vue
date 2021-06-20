@@ -12,8 +12,9 @@
           <i class="fas fa-exclamation-triangle warning-icon"></i>
         </div>
         <div class="content-text text-label">
-          Bạn có chắc muốn xóa
-          <b>{{ numberOfItem }}</b> bản ghi không?
+          <span>
+            Bạn có chắc muốn xóa <b>{{ numberOfItem }}</b> bản ghi không?
+          </span>
         </div>
       </div>
       <div class="popup__footer">
@@ -38,7 +39,9 @@ export default {
       numberOfItem: null,
     };
   },
-  methods: {
+  methods: {test() {
+    console.log('abc')
+  },
     /**
      * Hàm mở pop up
      * NVTOAN 17/06/2021
@@ -61,8 +64,8 @@ export default {
      * NVTOAN 18/06/2021
      */
     confirmDelete() {
-      this.$emit('deleteData');
-    }
+      this.$emit("deleteData");
+    },
   },
 };
 </script>

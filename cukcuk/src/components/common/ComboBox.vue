@@ -3,23 +3,24 @@
     class="comboBox"
     :style="{ width: customWidth }"
     tabindex="0"
-    @blur="isShow = false"
+    @blur="hideListAndCheckChanged"
   >
-    <div class="comboBox__btn" :class="{ 'comboBox__btn-focus': isShow }">
+    <div class="comboBox__btn" :class="{ 'comboBox__btn-focus': showList }">
       <div class="comboBox__btn-left">
         <div class="comboBox__content">
           <input
             type="text"
             :placeholder="customData.defaultValue"
             class="comboBox__text"
-            @focus="isShow = true"
+            @focus="showList = true"
+            @blur="hideListAndCheckChanged"
             v-model="inputModel"
           />
         </div>
         <div
           class="comboBox__icon-unselect"
           v-if="inputModel"
-          @click.stop="!isShow"
+          @click.stop="!showList"
           @click="unselectItem"
         >
           <i class="fas fa-times fa-xs"></i>
@@ -27,20 +28,20 @@
       </div>
       <div
         class="comboBox__icon-arrow"
-        :class="{ 'comboBox__icon-arrow-active': isShow }"
-        @click="isShow = !isShow"
+        :class="{ 'comboBox__icon-arrow-active': showList }"
+        @click="showList = !showList"
       >
         <div
           class="arrow-icon"
           :class="{
-            'rotate-180': isShow,
+            'rotate-180': showList,
           }"
         >
           <i class="fas fa-chevron-down fa-xs"></i>
         </div>
       </div>
     </div>
-    <div class="comboBox__list" v-show="isShow">
+    <div class="comboBox__list" v-show="showList">
       <div
         class="comboBox__list-item"
         :class="{ 'comboBox__item-selected': currentSelectedItem == index }"
@@ -76,12 +77,14 @@ export default {
   },
   data() {
     return {
-      isShow: false,
+      showList: false,
       customWidth: "",
       currentSelectedItem: null,
       cloneModel: "", //Đây là model từ dữ liệu gốc
       inputModel: "", //Model theo dõi input nhập vào để filter
       listItem: null,
+      originData: -1,
+      dataChanged: false,
     };
   },
   created() {
@@ -104,6 +107,10 @@ export default {
           this.click(this.cloneModel);
         }
       }
+
+      if(!this.clicked) {
+        this.originData = this.model;
+      }
     },
     inputModel: function (val) {
       if (!val) {
@@ -116,6 +123,18 @@ export default {
     },
   },
   methods: {
+
+    /**
+     * Hàm thực hiện khi người dùng không focus vào dropdown nữa
+     * NVTOAN 21/06/2021
+     */
+    hideListAndCheckChanged() {
+      this.showList = false;
+      if(this.originData != this.cloneModel) {
+        this.$emit('dataChanged');
+      }
+    },
+
     /**
      * Hàm xử lý khi hover chuột vào một item
      * NVTOAN 12/06/2021
@@ -144,7 +163,7 @@ export default {
       this.cloneModel = this.customData.items.indexOf(selectItem);
       this.currentSelectedItem = 0;
 
-      this.isShow = false;
+      this.showList = false;
     },
 
     /**
@@ -152,6 +171,10 @@ export default {
      * NVTOAN 12/06/2021
      */
     unselectItem() {
+      if(!this.clicked ) {
+        this.dataChanged = true;
+      }
+
       this.inputModel = null;
       this.currentSelectedItem = null;
       this.cloneModel = null;

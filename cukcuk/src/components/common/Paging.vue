@@ -153,6 +153,14 @@ export default {
         this.currentSelectedPageNum = this.customData.sumPageNum;
         this.$emit('clickPageNum', this.currentSelectedPageNum);
       }
+    },
+
+    /**
+     * Hàm xử lý khi ấn nút refresh data
+     * NVTOAN 20/06/2021
+     */
+    refreshData() {
+      this.currentSelectedPageNum = 1;
     }
   },
 };

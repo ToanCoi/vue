@@ -15,7 +15,7 @@
       <tbody ref="tbody">
         <tr
           v-for="(item, index) in customData.gridData"
-          :EmployeeId="item.EmployeeId"
+          :ItemId="item[customData.idFieldName]"
           :key="index"
           :class="{ 'tr-selected': selectRow(index) }"
           @mouseenter="rowHover"
@@ -38,7 +38,7 @@
         </tr>
       </tbody>
     </table>
-    <Paging :customData="paging" @clickPageNum="clickPageNum"/>
+    <Paging :customData="paging" @clickPageNum="clickPageNum" ref="Paging"/>
   </div>
 </template>
 
@@ -77,6 +77,7 @@ export default {
     },
   },
   methods: {
+
     /**
      * Hàm xử lý hover chuột vào row
      * NVTOAN 13/06/2021
@@ -151,6 +152,30 @@ export default {
     },
 
     /**
+     * Hàm lấy id của những row đang được chọn
+     * NVTOAN 20/06/2021
+     */
+    getListIdSelectedItem() {
+      let listId = [],
+        rows = this.$refs.tbody.querySelectorAll(".tr-selected");
+
+      //Lấy tất cả id của row đang được chọn
+      for (let i = 0; i < rows.length; i++) {
+        listId.push(rows[i].getAttribute("ItemId"));
+      }
+
+      return listId;
+    },
+
+    /**
+     * Hàm xử lý khi ấn nút refresh data
+     * NVTOAN 20/06/2021
+     */
+    refreshData() {
+      this.$refs.Paging.refreshData();
+    },
+
+    /**
      * Hàm xóa tất cả bản ghi
      * NVTOAN 17/06/2021
      */
@@ -160,7 +185,7 @@ export default {
 
       //Lấy tất cả id của row đang được chọn
       for (let i = 0; i < rows.length; i++) {
-        listId.push(rows[i].getAttribute("EmployeeId"));
+        listId.push(rows[i].getAttribute("ItemId"));
       }
 
       this.$bus.emit("loader", true);

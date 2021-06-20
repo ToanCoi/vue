@@ -69,6 +69,7 @@ export default {
         masked: true,
       },
       cloneModel: "",
+      originData: null,
     };
   },
   created() {
@@ -96,6 +97,7 @@ export default {
      * NVTOAN 14/06/2021
      */
     focus() {
+      this.originData = this.cloneModel;
       this.scaleTooltip = 0;
       this.invalidInput = false;
     },
@@ -104,6 +106,10 @@ export default {
      * NVTOAN 14/06/2021
      */
     blur() {
+      //Nếu người dùng đã thay dổi dữ liệu,  thông báo cho component cha phòng trường hợp người dùng cancel
+      if(this.originData != this.cloneModel) {
+        this.$emit('dataChanged');
+      }
       this.validate();
     },
 

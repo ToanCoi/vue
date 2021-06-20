@@ -25,6 +25,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.EmployeeCode"
@@ -33,6 +34,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.FullName"
@@ -43,6 +45,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.DateOfBirth"
@@ -51,6 +54,7 @@
               <div class="form-item">
                 <label class="text-label">Giới tính</label>
                 <ComboBox
+                  @dataChanged="dataChanged"
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.Gender"
                   :customData="genderComboBox"
@@ -61,6 +65,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.IdentityNumber"
@@ -69,6 +74,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.IdentityDate"
@@ -79,6 +85,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.IdentityPlace"
@@ -89,6 +96,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.Email"
@@ -97,6 +105,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.PhoneNumber"
@@ -112,6 +121,7 @@
               <div class="form-item">
                 <label class="text-label">Vị trí</label>
                 <ComboBox
+                  @dataChanged="dataChanged"
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.PositionName"
                   :customData="positionComboBox"
@@ -120,6 +130,7 @@
               <div class="form-item">
                 <label class="text-label">Phòng ban</label>
                 <ComboBox
+                  @dataChanged="dataChanged"
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.DepartmentName"
                   :customData="departmentComboBox"
@@ -130,6 +141,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.PersonalTaxCode"
@@ -138,6 +150,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.Salary"
@@ -148,6 +161,7 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
+                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.JoinDate"
@@ -156,6 +170,7 @@
               <div class="form-item">
                 <label class="text-label">Tình trạng công việc</label>
                 <ComboBox
+                  @dataChanged="dataChanged"
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.WorkStatus"
                   :customData="workStatusComboBox"
@@ -178,6 +193,7 @@
 
 <script>
 import EmployeesAPI from '../../api/components/employees/EmployeesAPI'
+import Resource from '../../js/common/Resource'
 /**
  * Hàm khởi tạo giá trị cho form
  * NVTOAN 14/06/2021
@@ -284,9 +300,12 @@ function initState() {
     },
 
     employee: {},
+    originData: {},
     id: null,
     saveValidate: false,
     allInputValid: true,
+    userEdit: false,
+    formType: null,
   };
 }
 export default {
@@ -308,12 +327,20 @@ export default {
 
       //Nếu là form sửa
       if (employeeId.length > 0) {
+        //gán form type để nếu người dùng tắt khi đang nhập thì mở popup tương ứng
+        this.formType = Resource.FormType.Edit;
+
         this.getEmployeeById(employeeId);
         this.id = employeeId;
+
       } else {
+        //gán form type để nếu người dùng tắt khi đang nhập thì mở popup tương ứng
+        this.formType = Resource.FormType.Add;
+
         await EmployeesAPI.getNewEmployeeCode()
           .then((response) => {
               this.employee.EmployeeCode = response.data;
+              this.originData = JSON.parse(JSON.stringify(this.employee));
           })
           .catch(() => {
 
@@ -323,6 +350,7 @@ export default {
             });
           });
       }
+
 
       this.showForm = true;
     },
@@ -337,6 +365,7 @@ export default {
 
       EmployeesAPI.getById(employeeId).then((response) => {
         this.employee = response.data;
+        this.originData = JSON.parse(JSON.stringify(this.employee));
       })
       .catch(() => {
 
@@ -347,8 +376,27 @@ export default {
       });
     },
 
+    /**
+     * Hàm đưa dữ liệu từ component input vào employee
+     * NVTOAN 20/06/2021
+     */
     updateValueInput(key, value) {
       this.employee[key] = value;
+    },
+
+    /**
+     * Hàm đánh dấu người dùng đã thay đổi dữ liệu trên form
+     * NVTOAN 20/06/2021
+     */
+    dataChanged() {
+      // this.userEdit = false;
+      for(let prop in this.originData) {
+        if(this.employee[prop] != this.originData[prop]) {console.log(this.employee[prop]); console.log(this.originData[prop])
+          return true;
+        }
+      }
+
+      return false;
     },
 
     /**
@@ -356,6 +404,19 @@ export default {
      * NVTOAN 13/06/2021
      */
     closeForm() {
+      //Nếu người dùng đã nhập/sửa dữ liệu, hỏi lại có muốn đóng không
+      if(this.dataChanged()) {
+        this.$emit('openConfirmCancelPopup', this.formType);
+      } else {
+        this.showForm = false;
+      }
+    },
+
+    /**
+     * Hàm đóng form khi đã xác nhận
+     * NVTOAN 20/06/2021
+     */
+    confirmCloseForm() {
       this.showForm = false;
     },
 
@@ -381,9 +442,14 @@ export default {
       }
 
       if (this.allInputValid) {
+        //Thêm dữ liệu
         if (!this.id) {
-          await EmployeesAPI.insert(this.employee).then((response) => {
-              console.log(response);
+          await EmployeesAPI.insert(this.employee).then(() => {
+              
+              this.$bus.emit("toast", {
+                toastType: "success",
+                toastMessage: "Thêm dữ liệu thành công",
+              });
             })
             .catch(() => {
 
@@ -393,8 +459,17 @@ export default {
                 toastMessage: "Không thể thêm, vui lòng liên hệ MISA",
               });
             });
-        } else {
-          await EmployeesAPI.update(this.id, this.employee)
+        } 
+        //Sửa dữ liệu
+        else 
+        {
+          await EmployeesAPI.update(this.id, this.employee).then(() => {
+
+            this.$bus.emit("toast", {
+                toastType: "success",
+                toastMessage: "Sửa dữ liệu thành công",
+              });
+          })
             .catch(() => {
               me.showForm = false;
 
@@ -408,11 +483,6 @@ export default {
         await this.closeForm();
 
         await this.$emit("refreshData");
-
-        await this.$bus.emit("toast", {
-          toastType: "success",
-          toastMessage: "Lưu liệu thành công",
-        });
       }
 
       //reset giá trị để nếu ấn lại thì kiểm tra lại

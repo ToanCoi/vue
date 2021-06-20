@@ -38,7 +38,7 @@ export default {
          * Hàm gọi cha mở form xóa
          */
         openFormDelete() {
-            this.$emit('openFormDelete', null)
+            this.$emit('openFormDelete')
         }
     },
 }
