@@ -113,7 +113,10 @@ export default {
      * NVTOAN 20/06/2021
      */
     clickFirstPage() {
-      this.currentSelectedPageNum = 1;
+      if(this.currentSelectedPageNum != 1) {
+        this.currentSelectedPageNum = 1;
+        this.$emit('clickPageNum', 1);
+      }
     },
 
     /**
@@ -121,7 +124,11 @@ export default {
      * NVTOAN 20/06/2021
      */
     clickPreviousPage() {
+      if(this.currentSelectedPageNum != 1) {
 
+        this.currentSelectedPageNum--;
+        this.$emit('clickPageNum', this.currentSelectedPageNum);
+      }
     },
 
     /**
@@ -129,7 +136,11 @@ export default {
      * NVTOAN 20/06/2021
      */
     clickNextPage() {
+      if(this.currentSelectedPageNum != this.customData.sumPageNum) {
 
+        this.currentSelectedPageNum++;
+        this.$emit('clickPageNum', this.currentSelectedPageNum);
+      }
     },
     
     /**
@@ -137,7 +148,11 @@ export default {
      * NVTOAN 20/06/2021
      */
     clickLastPage() {
+      if(this.currentSelectedPageNum != this.customData.sumPageNum) {
 
+        this.currentSelectedPageNum = this.customData.sumPageNum;
+        this.$emit('clickPageNum', this.currentSelectedPageNum);
+      }
     }
   },
 };

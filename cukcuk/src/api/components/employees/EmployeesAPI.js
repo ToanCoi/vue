@@ -20,13 +20,6 @@ class EmployeesAPI extends BaseAPI {
      * @returns 
      */
     filter(pageSize, pageNumber, employeeCode, fullName, phoneNumber, departmentId, positionId) {
-        console.log(`${this.controller}/Filter?pageSize=${pageSize}
-        &pageNumber=${pageNumber}
-        ${employeeCode ? ('&employeeCode=' + employeeCode) : ''}
-        ${fullName ? ('&fullName=' + fullName) : ''}
-        ${phoneNumber ? ('&phoneNumber=' + phoneNumber) : ''}
-        ${departmentId ? ('&departmentId=' + departmentId) : ''}
-        ${positionId ? ('&positionId=' + positionId) : ''}`);
         
         return BaseAPIConfig.get(`${this.controller}/Filter?pageSize=${pageSize}
                         &pageNumber=${pageNumber}

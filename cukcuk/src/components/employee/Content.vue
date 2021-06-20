@@ -128,7 +128,8 @@ export default {
      * NVTOAN 20/06/2021
      */
     async clickPageNum(index) {
-        let realPageSize = this.employeeTable.pageSize;
+        let realPageSize = this.employeeTable.pageSize,
+            realPageNum =  index;
         
         this.$bus.emit('loader', true);
 
@@ -139,7 +140,15 @@ export default {
           this.employeeTable.sumPageNum = Math.ceil(this.employeeTable.sumRecord / this.employeeTable.pageSize);
         });
 
-        await EmployeesAPI.filter(realPageSize, index, 'n')
+        //Nếu số dư số nhân viên
+        if(realPageSize * realPageNum > this.employeeTable.sumRecord) {
+
+          realPageSize = this.employeeTable.sumRecord  % this.employeeTable.sumPageNum;
+          
+          realPageNum = Math.ceil(this.employeeTable.sumRecord / realPageSize);
+        }
+
+        await EmployeesAPI.filter(realPageSize, realPageNum - 1, 'n')
         .then((response) => {
             this.employeeTable.gridData = response.data.Data; 
 
