@@ -1,9 +1,6 @@
 <template>
   <div class="content">
-    <HeaderContent
-      @openForm="openForm"
-      @openFormDelete="openDeletePopup"
-    />
+    <HeaderContent @openForm="openForm" @openFormDelete="openDeletePopup" />
     <ContentUtil @refreshData="refreshData" @filterTable="filterTable" />
     <Table
       ref="Table"
@@ -12,25 +9,42 @@
       @clickPageNum="getDataServer"
     />
     <!-- <Paging /> -->
-    <Form ref="Form" @refreshData="refreshData" @openConfirmCancelPopup="openConfirmCancelPopup"/>
-    <CautionPopup ref="DeletePopup" :customData="deletePopup" @confirmPopup="deleteSelectedEmployees">
+    <Form
+      ref="Form"
+      @refreshData="refreshData"
+      @openConfirmCancelPopup="openConfirmCancelPopup"
+    />
+    <CautionPopup
+      ref="DeletePopup"
+      :customData="deletePopup"
+      @confirmPopup="deleteSelectedEmployees"
+    >
       <template scope="props">
         <span>
-            Bạn có chắc muốn xóa <b>{{ props.emphasizeText }}</b> bản ghi không?
+          Bạn có chắc muốn xóa <b>{{ props.emphasizeText }}</b> bản ghi không?
         </span>
       </template>
     </CautionPopup>
-    <CautionPopup ref="CancelEditPopup" :customData="cancelEditPopup" @confirmPopup="cancelEditEmployees">
+    <CautionPopup
+      ref="CancelEditPopup"
+      :customData="cancelEditPopup"
+      @confirmPopup="cancelEditEmployees"
+    >
       <template>
         <span>
-            Thông tin nhân viên bạn đang sửa chưa được lưu, bạn có chắc muốn đóng form không?
+          Thông tin nhân viên bạn đang sửa chưa được lưu, bạn có chắc muốn đóng
+          form không?
         </span>
       </template>
     </CautionPopup>
-    <CautionPopup ref="CancelAddPopup" :customData="cancelAddPopup" @confirmPopup="cancelAddEmployees">
+    <CautionPopup
+      ref="CancelAddPopup"
+      :customData="cancelAddPopup"
+      @confirmPopup="cancelAddEmployees"
+    >
       <template>
         <span>
-            Bạn chưa lưu thông tin nhân viên, bạn có chắc muốn đóng form không?
+          Bạn chưa lưu thông tin nhân viên, bạn có chắc muốn đóng form không?
         </span>
       </template>
     </CautionPopup>
@@ -42,9 +56,9 @@ import HeaderContent from "./HeaderContent.vue";
 import ContentUtil from "./ContentUtil";
 import Table from "../common/Table.vue";
 import Form from "./Form.vue";
-import CautionPopup from '../common/popup/CautionPopup.vue'
-import EmployeesAPI from '../../api/components/employees/EmployeesAPI'
-import Resource from '../../js/common/Resource'
+import CautionPopup from "../common/popup/CautionPopup.vue";
+import EmployeesAPI from "../../api/components/employees/EmployeesAPI";
+import Resource from "../../js/common/Resource";
 
 export default {
   name: "Employee",
@@ -53,8 +67,7 @@ export default {
     ContentUtil,
     Table,
     Form,
-    CautionPopup
-    // Popup,
+    CautionPopup,
   },
   data() {
     return {
@@ -109,7 +122,7 @@ export default {
         ],
         gridData: null,
         idFieldName: "EmployeeId",
-        pageSize: 4,
+        pageSize: 5,
         sumPageNum: 1,
         sumRecord: 0,
       },
@@ -138,30 +151,31 @@ export default {
         cancelBtnText: "Tiếp tục nhập",
         confirmBtnClass: "btn-primary",
         confirmBtnText: "Đóng",
-      }
+      },
     };
   },
   async created() {
     await this.getDataServer(1);
   },
   methods: {
-    
     /**
      * Hàm lấy dữ liệu trên server, truyền vào page number
      * NVTOAN 16/06/2021
      */
     async getDataServer(index) {
-        this.$bus.emit('loader', true);
+      this.$bus.emit("loader", true);
 
-        await EmployeesAPI.filter(this.employeeTable.pageSize, index -  1, 'n')
-        .then((response) => {
+      await EmployeesAPI.employeeFilter(
+        this.employeeTable.pageSize,
+        index - 1,
+        "n"
+      ).then((response) => {
+        this.employeeTable.gridData = response.data.Data;
+        this.employeeTable.sumRecord = response.data.TotalRecord;
+        this.employeeTable.sumPageNum = response.data.TotalPage;
+      });
 
-            this.employeeTable.gridData = response.data.Data; 
-            this.employeeTable.sumRecord = response.data.TotalRecord;
-            this.employeeTable.sumPageNum = response.data.TotalPage;
-        });
-
-        this.$bus.emit('loader', false);
+      this.$bus.emit("loader", false);
     },
 
     /**
@@ -200,9 +214,9 @@ export default {
      * NVTOAN 20/06/2021
      */
     openConfirmCancelPopup(formType) {
-      if(formType == Resource.FormType.Add) {
+      if (formType == Resource.FormType.Add) {
         this.$refs.CancelAddPopup.open();
-      } else if(formType == Resource.FormType.Edit) {
+      } else if (formType == Resource.FormType.Edit) {
         this.$refs.CancelEditPopup.open();
       }
     },
@@ -246,33 +260,45 @@ export default {
 
       for (let i = 0; i < listId.length; i++) {
         await EmployeesAPI.delete(listId[i]).catch(() => {
-
-            this.$bus.emit("toast", {
-              toastType: "danger",
-              toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
-            });
+          this.$bus.emit("toast", {
+            toastType: "danger",
+            toastMessage: "Có lỗi xảy ra, vui lòng liên hệ MISA",
           });
+        });
       }
 
       this.$refs.DeletePopup.close();
 
-      this.$bus.emit('loader', false);
+      this.$bus.emit("loader", false);
 
-      this.$bus.emit('toast', {
+      this.$bus.emit("toast", {
         toastType: "success",
-        toastMessage: "Xóa dữ liệu thành công"
+        toastMessage: "Xóa dữ liệu thành công",
       });
 
       this.refreshData();
     },
 
     /**
-     * Hàm gọi table để hiển thị dữ liệu filter
+     * Hàm filter dữ liệu
      * NVTOAN 18/06/2021
      */
-    filterTable(filterValue) {
-        this.$refs.Table.filterData(filterValue);
-    }
+    async filterTable(filterValue) {
+      this.$bus.emit("loader", true);
+
+      if (filterValue) {
+        await EmployeesAPI.employeeFilter(this.employeeTable.pageSize,0,filterValue)
+        .then((response) => {
+          this.employeeTable.gridData = response.data.Data;
+          this.employeeTable.sumRecord = response.data.TotalRecord;
+          this.employeeTable.sumPageNum = response.data.TotalPage;
+        });
+      } else {
+        this.getDataServer(1);
+      }
+
+      this.$bus.emit("loader", false);
+    },
   },
 };
 </script>

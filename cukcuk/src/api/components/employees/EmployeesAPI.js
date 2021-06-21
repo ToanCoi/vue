@@ -9,7 +9,8 @@ class EmployeesAPI extends BaseAPI {
     }
 
     /**
-     * Hàm filter dữ liệu
+     * Hàm filter dữ liệu theo các tiêu chí
+     * NVTOAN 20/06/2021
      * @param {*} pageSize 
      * @param {*} pageNumber 
      * @param {*} employeeCode 
@@ -30,6 +31,29 @@ class EmployeesAPI extends BaseAPI {
                         ${positionId ? ('&positionId=' + positionId) : ''}`);
     }
 
+    /**
+     * Hàm filter employee theo một biến duy nhất
+     * NVTOAN 21/06/2021
+     * @param {*} pageSize 
+     * @param {*} pageNumber 
+     * @param {*} employeeFilter 
+     * @param {*} departmentId 
+     * @param {*} positionId 
+     * @returns 
+     */
+    employeeFilter(pageSize, pageNumber, employeeFilter, departmentId, positionId) {
+        return BaseAPIConfig.get(`${this.controller}/employeeFilter?pageSize=${pageSize}
+                        &pageNumber=${pageNumber}
+                        ${employeeFilter ? ('&employeeFilter=' + employeeFilter) : ''}
+                        ${departmentId ? ('&departmentId=' + departmentId) : ''}
+                        ${positionId ? ('&positionId=' + positionId) : ''}`);
+    }
+
+    /**
+     * Hàm lấy mã nhân viên mới
+     * NVTOAN 20/05/2021
+     * @returns 
+     */
     getNewEmployeeCode() {
         return BaseAPIConfig.get(`${this.controller}/NewEmployeeCode`);
     }

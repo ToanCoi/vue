@@ -9,17 +9,27 @@
         (<span style="color: red">*</span>)
       </span>
     </label>
+    <DxDateBox
+      v-if="customData.dataType == 'Date'"
+      v-model="cloneModel"
+      displayFormat="dd/MM/yyyy"
+      height="42px"
+      placeholder="dd/mm/yyy"
+      :useMaskBehavior="true"
+      width="231px"
+    />
+    <!-- <Money v-else-if="customData.dataType == 'Number'" v-model="cloneModel" va></Money> -->
     <input
+      v-else
       :type="customData.inputType"
       class="field-input"
-      :class="{ invalidInput: invalidInput }"
+      :class="{ 'invalidInput': invalidInput }"
       :placeholder="customData.placeholder"
       :id="customData.inputId"
       @focus="focus"
       @blur="blur"
       ref="input"
       v-model="cloneModel"
-      :v-money="{ money: customData.dataType == 'Number' }"
     />
   </div>
 </template>
@@ -27,27 +37,16 @@
 <script>
 import Resource from "../../js/common/Resource";
 import moment from "moment";
-// import DateBox from "devextreme-vue/date_box";
-
-// You can create the DateBox widget using the following code.
-// Read more at https://js.devexpress.com/Documentation/Guide/Widgets/Common/Advanced/3rd-Party_Frameworks_Integration_API/#Create_and_Configure_a_Widget.
-
-// new DateBox(this, {
-//     "dateOutOfRangeMessage": "Ngày nhập không hợp lệ",
-//     "displayFormat": "dd/MM/yyyy",
-//     "height": "40px",
-//     "hint": "",
-//     "invalidDateMessage": "Ngày nhập không hợp lệ",
-//     "opened": true,
-//     "placeholder": "dd/mm/yyyy",
-//     "useMaskBehavior": true
-// });
+import DxDateBox from "devextreme-vue/date-box";
+import 'devextreme/dist/css/dx.light.css';
+// import {Money} from 'v-money'
 
 
 export default {
-  // components: {
-  //   DateBox
-  // },
+  components: {
+    DxDateBox,
+    // Money,
+  },
   props: {
     customData: {
       type: Object,
@@ -56,20 +55,25 @@ export default {
     model: {
       default: null,
     },
+    originData: {
+      default: null,
+    },
   },
   data() {
     return {
       errorMessage: "",
       scaleTooltip: 0,
       invalidInput: false,
-      money: {
-        decimal: ",",
-        thousands: ",",
-        precision: 3,
-        masked: true,
-      },
       cloneModel: "",
-      originData: null,
+      focused: false,
+      money: {
+          decimal: ',',
+          thousands: '.',
+          prefix: 'R$ ',
+          suffix: ' #',
+          precision: 2,
+          masked: false
+      }
     };
   },
   created() {
@@ -78,6 +82,11 @@ export default {
   watch: {
     cloneModel: function (val) {
       this.$emit("updateValueInput", this.customData.inputId, val);
+
+      //Nếu người dùng chưa nhấn gì thì truyền ra dữ liệu gốc
+      if (!this.focused) {
+        this.$emit("getOriginData", this.customData.inputId, val);
+      }
     },
     model: function (val) {
       this.cloneModel = JSON.parse(JSON.stringify(val));
@@ -97,7 +106,7 @@ export default {
      * NVTOAN 14/06/2021
      */
     focus() {
-      this.originData = this.cloneModel;
+      this.focused = true;
       this.scaleTooltip = 0;
       this.invalidInput = false;
     },
@@ -106,10 +115,6 @@ export default {
      * NVTOAN 14/06/2021
      */
     blur() {
-      //Nếu người dùng đã thay dổi dữ liệu,  thông báo cho component cha phòng trường hợp người dùng cancel
-      if(this.originData != this.cloneModel) {
-        this.$emit('dataChanged');
-      }
       this.validate();
     },
 
@@ -189,9 +194,11 @@ export default {
      * Hàm validate ngày tháng
      * NVTOAN 14/06/2021
      */
-    validateDate(value) {console.log(value)
-      let regex = /^[0-3]?[0-9]-[0-3]?[0-9]-(?:[0-9]{2})?[0-9]{2}$/;console.log('r ' + regex.test(value))
-     
+    validateDate(value) {
+      console.log(value);
+      let regex = /^[0-3]?[0-9]-[0-3]?[0-9]-(?:[0-9]{2})?[0-9]{2}$/;
+      console.log("r " + regex.test(value));
+
       return true;
     },
   },
@@ -217,6 +224,11 @@ input:focus {
   outline: none;
 }
 
+.v-money {
+  width: calc(var(--column-width) * 3 - 2px);
+}
+
+/* tooltip */
 .tooltip {
   position: relative;
   --scale: 0;

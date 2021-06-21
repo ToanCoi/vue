@@ -29,13 +29,9 @@
     border-radius: 10px;
 }
 
-* {
-    transition: .2s;
-}
-
-
 body {
     font-family: 'GoogleSans-regular', sans-serif;
+    height: 100vh !important;
 }
 
 a {
@@ -53,6 +49,7 @@ a {
     height: 100%;
     width: calc(100% - var(--nav-width) - 1px);
     margin-left: calc(var(--nav-width));
+    transition: .2s;
 }
 .overlay {
     position: absolute;
@@ -70,7 +67,7 @@ a {
     justify-content: center;
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.4);
 }
 
 .loader__icon {
@@ -169,6 +166,41 @@ a {
 /* rotate */
 .rotate-180 {
     transform: rotate(180deg);
+}
+
+/* date box */
+
+.dx-show-invalid-badge.dx-datebox.dx-textbox.dx-texteditor.dx-dropdowneditor-button-visible.dx-editor-outlined.dx-texteditor-empty.dx-widget.dx-visibility-change-handler.dx-dropdowneditor.dx-datebox-date.dx-datebox-calendar {
+    margin-top: 4px !important;
+}
+
+.dx-placeholder::before {
+    padding-left: 16px !important;
+}
+
+.dx-placeholder {
+    font-family: 'GoogleSans-regular' !important;
+}
+
+input.dx-texteditor-input {
+    padding-left: 16px !important;
+    font-family: 'GoogleSans-regular' !important;
+}
+
+.dx-texteditor.dx-editor-outlined {
+    border: 1px solid #bbb;
+}
+
+.dx-state-focused {
+    border: 1px solid #019160 !important;
+}
+
+.dx-state-active {
+    border: 1px solid #019160 !important;
+}
+
+.dx-texteditor-container {
+    transition: 0s !important;
 }
 
 /* Font */

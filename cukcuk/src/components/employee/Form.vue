@@ -25,38 +25,42 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.EmployeeCode"
+                :originData="originData.EmployeeCode"
+                @getOriginData="getOriginData"
                 :customData="employeeCodeInput"
               />
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.FullName"
+                :originData="originData.FullName"
+                @getOriginData="getOriginData"
                 :customData="employeeNameInput"
               />
             </div>
             <div class="form-row">
               <FieldInputLabel
-                MustValidate="true"
+               
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.DateOfBirth"
+                :originData="originData.DateOfBirth"
+                @getOriginData="getOriginData"
                 :customData="dateOfBirthInput"
               />
               <div class="form-item">
                 <label class="text-label">Giới tính</label>
                 <ComboBox
-                  @dataChanged="dataChanged"
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.Gender"
+                  :originData="originData.Gender"
+                  @getOriginData="getOriginData"
                   :customData="genderComboBox"
                 />
               </div>
@@ -65,19 +69,21 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.IdentityNumber"
+                :originData="originData.IdentityNumber"
+                @getOriginData="getOriginData"
                 :customData="identityNumberInput"
               />
               <FieldInputLabel
-                MustValidate="true"
+                
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.IdentityDate"
+                :originData="originData.IdentityDate"
+                @getOriginData="getOriginData"
                 :customData="identityDateInput"
               />
             </div>
@@ -85,10 +91,11 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.IdentityPlace"
+                :originData="originData.IdentityPlace"
+                @getOriginData="getOriginData"
                 :customData="identityPlaceInput"
               />
             </div>
@@ -96,19 +103,21 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.Email"
+                :originData="originData.Email"
+                @getOriginData="getOriginData"
                 :customData="emailInput"
               />
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.PhoneNumber"
+                :originData="originData.PhoneNumber"
+                @getOriginData="getOriginData"
                 :customData="phoneNumberInput"
               />
             </div>
@@ -121,18 +130,20 @@
               <div class="form-item">
                 <label class="text-label">Vị trí</label>
                 <ComboBox
-                  @dataChanged="dataChanged"
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.PositionName"
+                  :originData="originData.PositionName"
+                  @getOriginData="getOriginData"
                   :customData="positionComboBox"
                 />
               </div>
               <div class="form-item">
                 <label class="text-label">Phòng ban</label>
                 <ComboBox
-                  @dataChanged="dataChanged"
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.DepartmentName"
+                  :originData="originData.DepartmentName"
+                  @getOriginData="getOriginData"
                   :customData="departmentComboBox"
                 />
               </div>
@@ -141,38 +152,42 @@
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.PersonalTaxCode"
+                :originData="originData.PersonalTaxCode"
+                @getOriginData="getOriginData"
                 :customData="taxCodeInput"
               />
               <FieldInputLabel
                 MustValidate="true"
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.Salary"
+                :originData="originData.Salary"
+                @getOriginData="getOriginData"
                 :customData="salaryInput"
               />
             </div>
             <div class="form-row">
               <FieldInputLabel
-                MustValidate="true"
+               
                 v-on:updateValueInput="updateValueInput"
-                @dataChanged="dataChanged"
                 @invalidData="invalidData"
                 class="form-item"
                 :model="employee.JoinDate"
+                :originData="originData.JoinDate"
+                @getOriginData="getOriginData"
                 :customData="joinDateInput"
               />
               <div class="form-item">
                 <label class="text-label">Tình trạng công việc</label>
                 <ComboBox
-                  @dataChanged="dataChanged"
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.WorkStatus"
+                  :originData="originData.WorkStatus"
+                  @getOriginData="getOriginData"
                   :customData="workStatusComboBox"
                 />
               </div>
@@ -304,7 +319,6 @@ function initState() {
     id: null,
     saveValidate: false,
     allInputValid: true,
-    userEdit: false,
     formType: null,
   };
 }
@@ -340,7 +354,7 @@ export default {
         await EmployeesAPI.getNewEmployeeCode()
           .then((response) => {
               this.employee.EmployeeCode = response.data;
-              this.originData = JSON.parse(JSON.stringify(this.employee));
+              JSON.parse(JSON.stringify(this.originData, this.employee));
           })
           .catch(() => {
 
@@ -365,7 +379,7 @@ export default {
 
       EmployeesAPI.getById(employeeId).then((response) => {
         this.employee = response.data;
-        this.originData = JSON.parse(JSON.stringify(this.employee));
+        JSON.parse(JSON.stringify(this.originData, this.employee));
       })
       .catch(() => {
 
@@ -385,13 +399,21 @@ export default {
     },
 
     /**
+     * Hàm đưa dữ liệu từ component input vào employee
+     * NVTOAN 20/06/2021
+     */
+    getOriginData(key, value) {
+      this.originData[key] = value;
+    },
+
+    /**
      * Hàm đánh dấu người dùng đã thay đổi dữ liệu trên form
      * NVTOAN 20/06/2021
      */
     dataChanged() {
       // this.userEdit = false;
       for(let prop in this.originData) {
-        if(this.employee[prop] != this.originData[prop]) {console.log(this.employee[prop]); console.log(this.originData[prop])
+        if(this.employee[prop] != this.originData[prop]) {
           return true;
         }
       }
@@ -441,20 +463,20 @@ export default {
         await elValidate[i].querySelector(".field-input").blur();
       }
 
-      if (this.allInputValid) {
+      if (me.allInputValid) {
         //Thêm dữ liệu
-        if (!this.id) {
-          await EmployeesAPI.insert(this.employee).then(() => {
+        if (!me.id) {
+          await EmployeesAPI.insert(me.employee).then(() => {
               
-              this.$bus.emit("toast", {
+              me.$bus.emit("toast", {
                 toastType: "success",
                 toastMessage: "Thêm dữ liệu thành công",
               });
             })
-            .catch(() => {
+            .catch(() => {console.log(me.employee)
 
               me.showForm = false;
-              this.$bus.emit("toast", {
+              me.$bus.emit("toast", {
                 toastType: "danger",
                 toastMessage: "Không thể thêm, vui lòng liên hệ MISA",
               });
@@ -463,9 +485,9 @@ export default {
         //Sửa dữ liệu
         else 
         {
-          await EmployeesAPI.update(this.id, this.employee).then(() => {
+          await EmployeesAPI.update(me.id, me.employee).then(() => {
 
-            this.$bus.emit("toast", {
+            me.$bus.emit("toast", {
                 toastType: "success",
                 toastMessage: "Sửa dữ liệu thành công",
               });
@@ -473,20 +495,20 @@ export default {
             .catch(() => {
               me.showForm = false;
 
-              this.$bus.emit("toast", {
+              me.$bus.emit("toast", {
                 toastType: "danger",
                 toastMessage: "Không thể sửa dữ liệu, vui lòng liên hệ MISA",
               });
 
             });
         }
-        await this.closeForm();
+        await me.confirmCloseForm();
 
-        await this.$emit("refreshData");
+        await me.$emit("refreshData");
       }
 
       //reset giá trị để nếu ấn lại thì kiểm tra lại
-      this.allInputValid = true;
+      me.allInputValid = true;
     },
   },
 };

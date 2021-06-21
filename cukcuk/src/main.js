@@ -16,22 +16,6 @@ import FieldInputIcon from './components/common/FieldInputIcon.vue'
 import FieldInputLabel from './components/common/FieldInputLabel.vue'
 import Dropdown from './components/common/Dropdown.vue'
 import ComboBox from './components/common/ComboBox.vue'
-import 'devextreme/dist/css/dx.light.css';
-
-// You can create the DateBox widget using the following code.
-// Read more at https://js.devexpress.com/Documentation/Guide/Widgets/Common/Advanced/3rd-Party_Frameworks_Integration_API/#Create_and_Configure_a_Widget.
-
-// new DevExpress.ui.dxDateBox(container, {
-//   "dateOutOfRangeMessage": "Ngày nhập không hợp lệ",
-//   "displayFormat": "dd/MM/yyyy",
-//   "height": "40px",
-//   "hint": "",
-//   "invalidDateMessage": "Ngày nhập không hợp lệ",
-//   "opened": true,
-//   "placeholder": "dd/mm/yyyy",
-//   "useMaskBehavior": true
-// });
-
 
 Vue.config.productionTip = false
 
