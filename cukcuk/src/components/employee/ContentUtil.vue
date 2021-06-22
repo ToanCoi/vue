@@ -10,9 +10,8 @@
           v-debounce:400ms="filterTableData"
         />
       </div>
-      <ComboBox :customData="departmentComboBox" />
-      <ComboBox :customData="positionComboBox" />
-      <DxComboBox :customData="testcbBox" />
+      <DxComboBox :customData="departmentComboBox" />
+      <DxComboBox :customData="positionComboBox" />
     </div>
     <div
       class="util__right btn btn-default"
@@ -35,15 +34,27 @@ export default {
     return {
       departmentComboBox: {
         defaultValue: "Tất cả phòng ban",
-        items: ["Phòng nhân sự", "Phòng kế toán", "Phòng kinh doanh"],
+        items: [
+          "Phòng nhân sự",
+          "Phòng kế toán",
+          "Phòng kinh doanh",
+          "SuperPlasma 50",
+          "SuperLED 50",
+          "SuperLED 42",
+          "SuperLCD 55",
+          "SuperLCD 42",
+          "SuperPlasma 65",
+          "SuperLCD 70",
+          "Projector Plus",
+          "Projector PlusHT",
+          "ExcelRemote IR",
+          "ExcelRemote BT",
+          "ExcelRemote IP",
+        ],
         width: 2.8,
+        height: "42px",
       },
       positionComboBox: {
-        defaultValue: "Tất cả vị trí",
-        items: ["Nhân viên", "Giám đốc", "Trưởng phòng"],
-        width: 2.8,
-      },
-      testcbBox: {
         defaultValue: "Tất cả vị trí",
         items: [
           "Nhân viên",
@@ -87,7 +98,7 @@ export default {
 </script>
 
 <style scoped>
-.comboBox {
+.dxCombobox {
   margin-left: 16px;
 }
 </style>

@@ -17,6 +17,7 @@
       placeholder="dd/mm/yyy"
       :useMaskBehavior="true"
       width="231px"
+      class="dxDateBox"
     />
     <!-- <Money v-else-if="customData.dataType == 'Number'" v-model="cloneModel" va></Money> -->
     <input
@@ -226,6 +227,10 @@ input:focus {
 
 .v-money {
   width: calc(var(--column-width) * 3 - 2px);
+}
+
+.dxDateBox {
+  margin-top: 4px !important;
 }
 
 /* tooltip */

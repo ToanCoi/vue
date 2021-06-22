@@ -56,7 +56,7 @@
               />
               <div class="form-item">
                 <label class="text-label">Giới tính</label>
-                <ComboBox
+                <DxComboBox
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.Gender"
                   :originData="originData.Gender"
@@ -129,7 +129,7 @@
             <div class="form-row">
               <div class="form-item">
                 <label class="text-label">Vị trí</label>
-                <ComboBox
+                <DxComboBox
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.PositionName"
                   :originData="originData.PositionName"
@@ -139,7 +139,7 @@
               </div>
               <div class="form-item">
                 <label class="text-label">Phòng ban</label>
-                <ComboBox
+                <DxComboBox
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.DepartmentName"
                   :originData="originData.DepartmentName"
@@ -183,14 +183,13 @@
               />
               <div class="form-item">
                 <label class="text-label">Tình trạng công việc</label>
-                <!-- <ComboBox
+                <DxComboBox
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.WorkStatus"
                   :originData="originData.WorkStatus"
                   @getOriginData="getOriginData"
                   :customData="workStatusComboBox"
-                /> -->
-                <DxComboBox :customData="testcbBox"/>
+                />
               </div>
             </div>
           </div>
@@ -217,28 +216,6 @@ import DxComboBox from '../common/DxComboBox.vue'
  */
 function initState() {
   return {
-     testcbBox: {
-        defaultValue: "Tất cả vị trí",
-        items: [
-          "Nhân viên",
-          "Giám đốc",
-          "Trưởng phòng",
-          "SuperPlasma 50",
-          "SuperLED 50",
-          "SuperLED 42",
-          "SuperLCD 55",
-          "SuperLCD 42",
-          "SuperPlasma 65",
-          "SuperLCD 70",
-          "Projector Plus",
-          "Projector PlusHT",
-          "ExcelRemote IR",
-          "ExcelRemote BT",
-          "ExcelRemote IP",
-        ],
-        width: '3 + 18px',
-        height: "42px",
-      },
     showForm: false,
     //input
     employeeCodeInput: {
@@ -313,7 +290,8 @@ function initState() {
       inputId: "Gender",
       defaultValue: "Chọn giới tính",
       items: ["Nữ", "Nam", "Khác"],
-      width: "3 + 16px",
+      width: "3 + 18px",
+      height: "42px",
       dataType: "Enum",
       EnumName: "Gender",
     },
@@ -321,19 +299,22 @@ function initState() {
       inputId: "DepartmentName",
       defaultValue: "Chọn phòng ban",
       items: ["Phòng nhân sự", "Phòng kế toán", "Phòng kinh doanh"],
-      width: "3 + 16px",
+      width: "3 + 18px",
+      height: "42px",
     },
     positionComboBox: {
       inputId: "PositionName",
       defaultValue: "Chọn vị trí",
       items: ["Nhân viên", "Giám đốc", "Trưởng phòng"],
-      width: "3 + 16px",
+      width: "3 + 18px",
+      height: "42px",
     },
     workStatusComboBox: {
       inputId: "WorkStatus",
       defaultValue: "Chọn trạng thái làm việc",
       items: ["Đang làm việc", "Đang thử việc", "Đã nghỉ việc"],
-      width: "3 + 16px",
+      width: "3 + 18px",
+      height: "42px",
       dataType: "Enum",
       EnumName: "WorkStatus",
     },
@@ -543,4 +524,7 @@ export default {
 
 <style scoped>
 @import url("../../assets/css/common/form.css");
+.dxCombobox {
+  margin-top: 4px;
+}
 </style>

@@ -3,7 +3,6 @@ input {
     height: 40px;
     font-size: 13px;
     padding-left: 16px;
-    margin-top: 4px;
 }
 
 input:focus {

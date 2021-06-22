@@ -188,6 +188,7 @@ a {
 input.dx-texteditor-input {
     padding-left: 16px !important;
     font-family: 'GoogleSans-regular' !important;
+    font-size: 13px;
 }
 
 .dx-texteditor.dx-editor-outlined {
