@@ -12,6 +12,7 @@
       </div>
       <ComboBox :customData="departmentComboBox" />
       <ComboBox :customData="positionComboBox" />
+      <DxComboBox :customData="testcbBox" />
     </div>
     <div
       class="util__right btn btn-default"
@@ -24,7 +25,12 @@
 </template>
 
 <script>
+import DxComboBox from "../common/DxComboBox.vue";
+
 export default {
+  components: {
+    DxComboBox,
+  },
   data() {
     return {
       departmentComboBox: {
@@ -36,6 +42,28 @@ export default {
         defaultValue: "Tất cả vị trí",
         items: ["Nhân viên", "Giám đốc", "Trưởng phòng"],
         width: 2.8,
+      },
+      testcbBox: {
+        defaultValue: "Tất cả vị trí",
+        items: [
+          "Nhân viên",
+          "Giám đốc",
+          "Trưởng phòng",
+          "SuperPlasma 50",
+          "SuperLED 50",
+          "SuperLED 42",
+          "SuperLCD 55",
+          "SuperLCD 42",
+          "SuperPlasma 65",
+          "SuperLCD 70",
+          "Projector Plus",
+          "Projector PlusHT",
+          "ExcelRemote IR",
+          "ExcelRemote BT",
+          "ExcelRemote IP",
+        ],
+        width: 2.8,
+        height: "42px",
       },
     };
   },
@@ -52,7 +80,7 @@ export default {
      * NVTOAN 18/06/2021
      */
     filterTableData(val) {
-        this.$emit('filterTable', val);
+      this.$emit("filterTable", val);
     },
   },
 };

@@ -183,13 +183,14 @@
               />
               <div class="form-item">
                 <label class="text-label">Tình trạng công việc</label>
-                <ComboBox
+                <!-- <ComboBox
                   v-on:updateValueInput="updateValueInput"
                   :model="employee.WorkStatus"
                   :originData="originData.WorkStatus"
                   @getOriginData="getOriginData"
                   :customData="workStatusComboBox"
-                />
+                /> -->
+                <DxComboBox :customData="testcbBox"/>
               </div>
             </div>
           </div>
@@ -209,12 +210,35 @@
 <script>
 import EmployeesAPI from '../../api/components/employees/EmployeesAPI'
 import Resource from '../../js/common/Resource'
+import DxComboBox from '../common/DxComboBox.vue'
 /**
  * Hàm khởi tạo giá trị cho form
  * NVTOAN 14/06/2021
  */
 function initState() {
   return {
+     testcbBox: {
+        defaultValue: "Tất cả vị trí",
+        items: [
+          "Nhân viên",
+          "Giám đốc",
+          "Trưởng phòng",
+          "SuperPlasma 50",
+          "SuperLED 50",
+          "SuperLED 42",
+          "SuperLCD 55",
+          "SuperLCD 42",
+          "SuperPlasma 65",
+          "SuperLCD 70",
+          "Projector Plus",
+          "Projector PlusHT",
+          "ExcelRemote IR",
+          "ExcelRemote BT",
+          "ExcelRemote IP",
+        ],
+        width: '3 + 18px',
+        height: "42px",
+      },
     showForm: false,
     //input
     employeeCodeInput: {
@@ -323,6 +347,9 @@ function initState() {
   };
 }
 export default {
+  components: {
+    DxComboBox
+  },
   data() {
     return initState();
   },
