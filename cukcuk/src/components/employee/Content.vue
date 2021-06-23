@@ -127,6 +127,7 @@ export default {
         sumPageNum: 1,
         maxPageNumDisplay: 4,
         sumRecord: 0,
+        filterValue: 'n'
       },
 
       deletePopup: {
@@ -170,7 +171,7 @@ export default {
       await EmployeesAPI.employeeFilter(
         this.employeeTable.pageSize,
         index - 1,
-        "n"
+        this.employeeTable.filterValue
       ).then((response) => {
         this.employeeTable.gridData = response.data.Data;
         this.employeeTable.sumRecord = response.data.TotalRecord;
@@ -286,20 +287,13 @@ export default {
      * NVTOAN 18/06/2021
      */
     async filterTable(filterValue) {
-      this.$bus.emit("loader", true);
-
-      if (filterValue) {
-        await EmployeesAPI.employeeFilter(this.employeeTable.pageSize,0,filterValue)
-        .then((response) => {
-          this.employeeTable.gridData = response.data.Data;
-          this.employeeTable.sumRecord = response.data.TotalRecord;
-          this.employeeTable.sumPageNum = response.data.TotalPage;
-        });
+      if(filterValue) {
+        this.employeeTable.filterValue = filterValue;
       } else {
-        this.refreshData();
+        this.employeeTable.filterValue = "n";
       }
-
-      this.$bus.emit("loader", false);
+      
+      this.refreshData();
     },
 
     /**

@@ -4,10 +4,9 @@
       <span class="left__text">
         Hiển thị
         <b>{{
-          customData.pageSize * (currentSelectedPageNum - 1) +
-          1 +
+          startNum +
           "-" +
-          customData.pageSize * currentSelectedPageNum +
+          endNum +
           "/" +
           customData.sumRecord
         }}</b>
@@ -62,7 +61,7 @@
     <div class="paging__right">
       <div class="page-size__text">
         <span
-          ><b>{{ clonePageSize }}</b> nhân viên/trang</span
+          ><b>{{ pageSizeDisplay }}</b> nhân viên/trang</span
         >
       </div>
       <div class="page-size__direction">
@@ -101,6 +100,17 @@ export default {
       clonePageSize: this.customData.pageSize,
       timeOut: null,
     };
+  },
+  computed: {
+    startNum: function() {
+      return (this.customData.pageSize * (this.currentSelectedPageNum - 1) + 1).toString().padStart(2, '0');
+    },
+    endNum: function() {
+      return (this.customData.pageSize * this.currentSelectedPageNum).toString().padStart(2, '0');
+    },
+    pageSizeDisplay: function() {
+      return this.clonePageSize.toString().padStart(2, '0')
+    }
   },
   watch: {
     customData: {
