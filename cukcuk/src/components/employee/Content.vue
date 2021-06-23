@@ -7,6 +7,7 @@
       :customData="employeeTable"
       @openForm="openForm"
       @clickPageNum="getDataServer"
+      @changePageSize="changePageSize"
     />
     <!-- <Paging /> -->
     <Form
@@ -124,6 +125,7 @@ export default {
         idFieldName: "EmployeeId",
         pageSize: 5,
         sumPageNum: 1,
+        maxPageNumDisplay: 4,
         sumRecord: 0,
       },
 
@@ -294,11 +296,20 @@ export default {
           this.employeeTable.sumPageNum = response.data.TotalPage;
         });
       } else {
-        this.getDataServer(1);
+        this.refreshData();
       }
 
       this.$bus.emit("loader", false);
     },
+
+    /**
+     * Hàm thay đổi page size
+     * NVTOAN 23/06/2021
+     */
+    changePageSize(number) {
+      this.employeeTable.pageSize = number;
+      this.refreshData();
+    }
   },
 };
 </script>

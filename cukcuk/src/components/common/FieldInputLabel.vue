@@ -21,10 +21,23 @@
     />
     <!-- <Money v-else-if="customData.dataType == 'Number'" v-model="cloneModel" va></Money> -->
     <input
+      v-else-if="customData.dataType == 'Number'"
+      :type="customData.inputType"
+      class="field-input text-right"
+      :class="{ invalidInput: invalidInput }"
+      :placeholder="customData.placeholder"
+      :id="customData.inputId"
+      @focus="focus"
+      @blur="blur"
+      ref="input"
+      v-model="cloneModel"
+      v-money="money"
+    />
+    <input
       v-else
       :type="customData.inputType"
       class="field-input"
-      :class="{ 'invalidInput': invalidInput }"
+      :class="{ invalidInput: invalidInput }"
       :placeholder="customData.placeholder"
       :id="customData.inputId"
       @focus="focus"
@@ -39,9 +52,7 @@
 import Resource from "../../js/common/Resource";
 import moment from "moment";
 import DxDateBox from "devextreme-vue/date-box";
-import 'devextreme/dist/css/dx.light.css';
-// import {Money} from 'v-money'
-
+import "devextreme/dist/css/dx.light.css";
 
 export default {
   components: {
@@ -67,14 +78,15 @@ export default {
       invalidInput: false,
       cloneModel: "",
       focused: false,
+      valueUnique: true,
       money: {
-          decimal: ',',
-          thousands: '.',
-          prefix: 'R$ ',
-          suffix: ' #',
-          precision: 2,
-          masked: false
-      }
+        decimal: "",
+        thousands: ".",
+        prefix: "",
+        suffix: " (VND) ",
+        precision: 0,
+        masked: false,
+      },
     };
   },
   created() {
@@ -82,6 +94,9 @@ export default {
   },
   watch: {
     cloneModel: function (val) {
+      if (this.customData.dataType == "Number") {
+        val = val.toString().replace(/[^\d]/gi, "");
+      }
       this.$emit("updateValueInput", this.customData.inputId, val);
 
       //Nếu người dùng chưa nhấn gì thì truyền ra dữ liệu gốc
@@ -124,25 +139,17 @@ export default {
      * NVTOAN 14/06/2021
      */
     validate() {
-      let value = this.cloneModel;
+      let value = this.cloneModel,
+        isValid = true;
 
-      if (this.validateRequired(value)) {
-        if (!this.validateDataType(value)) {
-          this.errorMessage =
-            "'" + this.customData.labelText + " không hợp lệ" + "'";
-          this.invalidInput = true;
-          this.scaleTooltip = 1;
+      isValid = this.validateRequired(value);
 
-          //Dữ liệu chưa hợp lệ
-          this.$emit("invalidData");
-        }
-      } else {
-        this.errorMessage =
-          "'" + this.customData.labelText + " không được để trống" + "'";
-        this.invalidInput = true;
-        this.scaleTooltip = 1;
+      if (isValid) {
+        isValid = this.validateUnique(value);
+      }
 
-        this.$emit("invalidData");
+      if (isValid && this.isUnique) {console.log('a')
+        isValid = this.validateDataType(value);
       }
     },
 
@@ -152,10 +159,50 @@ export default {
      */
     validateRequired(value) {
       if (this.customData.isRequired) {
-        if (!value || value.length <= 0) return false;
+        if (!value || value.length <= 0) {
+          //tooltip
+          this.errorMessage =
+            "'" + this.customData.labelText + " không được để trống" + "'";
+          this.invalidInput = true;
+          this.scaleTooltip = 1;
+
+          //Dữ liệu chưa hợp lệ
+          this.$emit("invalidData");
+
+          return false;
+        }
       }
 
       return true;
+    },
+
+    /**
+     * Hàm gọi cha để validate unique
+     * NVTOAN 23/06/2021
+     */
+    async validateUnique(value) {
+      if (this.customData.isUnique) {
+        //gọi cha truy vấn api xem có dữ liệu hay chưa
+        await this.$emit("checkUnique", this.customData.inputId, value);
+
+      }
+      return true;
+    },
+
+    /**
+     * Hàm đánh dấu giá trị nhập không unique
+     * NVTOAN 23/06/2021
+     */
+    valueNotUnique() {
+      this.valueUnique = false;
+
+      //tooltip
+      this.errorMessage = "'" + this.customData.labelText + " đã tồn tại" + "'";
+      this.invalidInput = true;
+      this.scaleTooltip = 1;
+
+      //Dữ liệu chưa hợp lệ
+      this.$emit("invalidData");
     },
 
     /**
@@ -166,15 +213,22 @@ export default {
       let res = true;
 
       switch (this.customData.dataType) {
-        case Resource.DataTypeColumn.Number:
-          res = !isNaN(value);
-          break;
         case Resource.DataTypeColumn.Email:
           res = this.validateEmail(value);
           break;
         case Resource.DataTypeColumn.Date:
           res = this.validateDate(value);
           break;
+      }
+
+      if (!res) {
+        this.errorMessage =
+          "'" + this.customData.labelText + " không hợp lệ" + "'";
+        this.invalidInput = true;
+        this.scaleTooltip = 1;
+
+        //Dữ liệu chưa hợp lệ
+        this.$emit("invalidData");
       }
 
       return res;

@@ -27,7 +27,6 @@ export default {
     },
     model: {
       type: Number,
-      default: -1,
     },
   },
   data() {
@@ -37,10 +36,15 @@ export default {
   },
   watch: {
     currentValue: function (val) {
+
+      let index = this.customData.items.indexOf(val);
+
+      index = index != -1 ? index : null;
+
       this.$emit(
         "updateValueInput",
         this.customData.inputId,
-        this.customData.items.indexOf(val)
+        index
       );
     },
     model: function (val) {
@@ -55,11 +59,12 @@ export default {
 /* chỉnh nút mũi tên */
 .dxCombobox .dx-button-content {
   border-left: 1px solid #bbb;
+  border-radius: 0 4px 4px 0;
 }
 
 .dxCombobox .dx-button-content:hover {
   background-color: #e9ebee !important;
-  border-radius: 0 4px 0 0;
+  border-radius: 0 4px 4px 0;
 }
 .dxCombobox .dx-dropdowneditor-icon {
   border: none;
@@ -68,7 +73,7 @@ export default {
   background: url("../../assets/icon/chevron-down-solid.svg") no-repeat;
   background-size: 11px;
   background-position: center;
-  border-radius: 0 4px 0 0;
+  border-radius: 0 4px 4px 0;
   transition: 0.2s;
 }
 

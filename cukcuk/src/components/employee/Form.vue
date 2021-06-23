@@ -31,6 +31,8 @@
                 :originData="originData.EmployeeCode"
                 @getOriginData="getOriginData"
                 :customData="employeeCodeInput"
+                @checkUnique="checkUnique"
+                ref="EmployeeCode"
               />
               <FieldInputLabel
                 MustValidate="true"
@@ -41,11 +43,11 @@
                 :originData="originData.FullName"
                 @getOriginData="getOriginData"
                 :customData="employeeNameInput"
+                @checkUnique="checkUnique"
               />
             </div>
             <div class="form-row">
               <FieldInputLabel
-               
                 v-on:updateValueInput="updateValueInput"
                 @invalidData="invalidData"
                 class="form-item"
@@ -53,6 +55,7 @@
                 :originData="originData.DateOfBirth"
                 @getOriginData="getOriginData"
                 :customData="dateOfBirthInput"
+                @checkUnique="checkUnique"
               />
               <div class="form-item">
                 <label class="text-label">Giới tính</label>
@@ -75,9 +78,9 @@
                 :originData="originData.IdentityNumber"
                 @getOriginData="getOriginData"
                 :customData="identityNumberInput"
+                @checkUnique="checkUnique"
               />
               <FieldInputLabel
-                
                 v-on:updateValueInput="updateValueInput"
                 @invalidData="invalidData"
                 class="form-item"
@@ -85,6 +88,7 @@
                 :originData="originData.IdentityDate"
                 @getOriginData="getOriginData"
                 :customData="identityDateInput"
+                @checkUnique="checkUnique"
               />
             </div>
             <div class="form-row">
@@ -97,6 +101,7 @@
                 :originData="originData.IdentityPlace"
                 @getOriginData="getOriginData"
                 :customData="identityPlaceInput"
+                @checkUnique="checkUnique"
               />
             </div>
             <div class="form-row">
@@ -109,6 +114,7 @@
                 :originData="originData.Email"
                 @getOriginData="getOriginData"
                 :customData="emailInput"
+                @checkUnique="checkUnique"
               />
               <FieldInputLabel
                 MustValidate="true"
@@ -119,6 +125,7 @@
                 :originData="originData.PhoneNumber"
                 @getOriginData="getOriginData"
                 :customData="phoneNumberInput"
+                @checkUnique="checkUnique"
               />
             </div>
           </div>
@@ -158,6 +165,7 @@
                 :originData="originData.PersonalTaxCode"
                 @getOriginData="getOriginData"
                 :customData="taxCodeInput"
+                @checkUnique="checkUnique"
               />
               <FieldInputLabel
                 MustValidate="true"
@@ -168,11 +176,11 @@
                 :originData="originData.Salary"
                 @getOriginData="getOriginData"
                 :customData="salaryInput"
+                @checkUnique="checkUnique"
               />
             </div>
             <div class="form-row">
               <FieldInputLabel
-               
                 v-on:updateValueInput="updateValueInput"
                 @invalidData="invalidData"
                 class="form-item"
@@ -180,6 +188,7 @@
                 :originData="originData.JoinDate"
                 @getOriginData="getOriginData"
                 :customData="joinDateInput"
+                @checkUnique="checkUnique"
               />
               <div class="form-item">
                 <label class="text-label">Tình trạng công việc</label>
@@ -207,9 +216,9 @@
 </template>
 
 <script>
-import EmployeesAPI from '../../api/components/employees/EmployeesAPI'
-import Resource from '../../js/common/Resource'
-import DxComboBox from '../common/DxComboBox.vue'
+import EmployeesAPI from "../../api/components/employees/EmployeesAPI";
+import Resource from "../../js/common/Resource";
+import DxComboBox from "../common/DxComboBox.vue";
 /**
  * Hàm khởi tạo giá trị cho form
  * NVTOAN 14/06/2021
@@ -223,6 +232,7 @@ function initState() {
       labelText: "Mã nhân viên",
       isRequired: true,
       inputType: "text",
+      isUnique: true,
     },
     employeeNameInput: {
       inputId: "Fullname",
@@ -329,21 +339,18 @@ function initState() {
 }
 export default {
   components: {
-    DxComboBox
+    DxComboBox,
   },
   data() {
     return initState();
   },
-  created() {
-
-  },
+  created() {},
   methods: {
     /**
      * Hàm mở form
      * NVTOAN 13/06/2021
      */
     async openForm(employeeId) {
-
       //Gán lại giá trị của form
       await Object.assign(this.$data, initState());
 
@@ -354,25 +361,23 @@ export default {
 
         this.getEmployeeById(employeeId);
         this.id = employeeId;
-
       } else {
         //gán form type để nếu người dùng tắt khi đang nhập thì mở popup tương ứng
         this.formType = Resource.FormType.Add;
 
         await EmployeesAPI.getNewEmployeeCode()
           .then((response) => {
-              this.employee.EmployeeCode = response.data;
-              JSON.parse(JSON.stringify(this.originData, this.employee));
+            this.employee.EmployeeCode = response.data;
+            JSON.parse(JSON.stringify(this.originData, this.employee));
           })
           .catch(() => {
-
             this.$bus.emit("toast", {
               toastType: "danger",
-              toastMessage: "Có lỗi khi lấy mã nhân viên mới, vui lòng liên hệ MISA",
+              toastMessage:
+                "Có lỗi khi lấy mã nhân viên mới, vui lòng liên hệ MISA",
             });
           });
       }
-
 
       this.showForm = true;
     },
@@ -384,18 +389,17 @@ export default {
     getEmployeeById(employeeId) {
       console.log(employeeId);
 
-
-      EmployeesAPI.getById(employeeId).then((response) => {
-        this.employee = response.data;
-        JSON.parse(JSON.stringify(this.originData, this.employee));
-      })
-      .catch(() => {
-
-        this.$bus.emit("toast", {
-          toastType: "danger",
-          toastMessage: "Không thể sửa dữ liệu, vui lòng liên hệ MISA",
+      EmployeesAPI.getById(employeeId)
+        .then((response) => {
+          this.employee = response.data;
+          JSON.parse(JSON.stringify(this.originData, this.employee));
+        })
+        .catch(() => {
+          this.$bus.emit("toast", {
+            toastType: "danger",
+            toastMessage: "Không thể sửa dữ liệu, vui lòng liên hệ MISA",
+          });
         });
-      });
     },
 
     /**
@@ -420,8 +424,8 @@ export default {
      */
     dataChanged() {
       // this.userEdit = false;
-      for(let prop in this.originData) {
-        if(this.employee[prop] != this.originData[prop]) {
+      for (let prop in this.originData) {
+        if (this.employee[prop] != this.originData[prop]) {
           return true;
         }
       }
@@ -435,8 +439,8 @@ export default {
      */
     closeForm() {
       //Nếu người dùng đã nhập/sửa dữ liệu, hỏi lại có muốn đóng không
-      if(this.dataChanged()) {
-        this.$emit('openConfirmCancelPopup', this.formType);
+      if (this.dataChanged()) {
+        this.$emit("openConfirmCancelPopup", this.formType);
       } else {
         this.showForm = false;
       }
@@ -474,14 +478,15 @@ export default {
       if (me.allInputValid) {
         //Thêm dữ liệu
         if (!me.id) {
-          await EmployeesAPI.insert(me.employee).then(() => {
-              
+          await EmployeesAPI.insert(me.employee)
+            .then(() => {
               me.$bus.emit("toast", {
                 toastType: "success",
                 toastMessage: "Thêm dữ liệu thành công",
               });
             })
-            .catch(() => {console.log(me.employee)
+            .catch((err) => {
+              console.log(err);
 
               me.showForm = false;
               me.$bus.emit("toast", {
@@ -489,17 +494,16 @@ export default {
                 toastMessage: "Không thể thêm, vui lòng liên hệ MISA",
               });
             });
-        } 
+        }
         //Sửa dữ liệu
-        else 
-        {
-          await EmployeesAPI.update(me.id, me.employee).then(() => {
-
-            me.$bus.emit("toast", {
+        else {
+          await EmployeesAPI.update(me.id, me.employee)
+            .then(() => {
+              me.$bus.emit("toast", {
                 toastType: "success",
                 toastMessage: "Sửa dữ liệu thành công",
               });
-          })
+            })
             .catch(() => {
               me.showForm = false;
 
@@ -507,7 +511,6 @@ export default {
                 toastType: "danger",
                 toastMessage: "Không thể sửa dữ liệu, vui lòng liên hệ MISA",
               });
-
             });
         }
         await me.confirmCloseForm();
@@ -517,6 +520,22 @@ export default {
 
       //reset giá trị để nếu ấn lại thì kiểm tra lại
       me.allInputValid = true;
+    },
+
+    /**
+     * Hàm gọi api check unique
+     * NVTOAN 23/06/2021
+     */
+    async checkUnique(fieldName, value) {
+      await EmployeesAPI.filter(
+        1,
+        0,
+        fieldName == "EmployeeCode" ? value : null
+      ).then((response) => {
+        if(response.status != 204 && response.data.Data[0].EmployeeId != this.employee.EmployeeId) {
+          this.$refs[fieldName].valueNotUnique();
+        }
+      })
     },
   },
 };

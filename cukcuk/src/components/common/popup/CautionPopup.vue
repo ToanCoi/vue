@@ -63,7 +63,7 @@ export default {
      * Hàm mở popup
      * NVTOAN 20/06/2021 
      */
-    open() {debugger; // eslint-disable-line no-debugger
+    open() {
         this.isShow = true;
     },
 

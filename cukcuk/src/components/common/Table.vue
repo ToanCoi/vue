@@ -5,6 +5,10 @@
         <tr>
           <td
             v-for="(item, index) in customData.column"
+            :class="{
+              'text-right': item.dataType == 'Number',
+              'text-center': item.dataType == 'Date',
+            }"
             :key="index"
             :title="item.columnName"
           >
@@ -26,6 +30,10 @@
         >
           <td
             v-for="(col, index) in customData.column"
+            :class="{
+              'text-right': col.dataType == 'Number',
+              'text-center': col.dataType == 'Date',
+            }"
             :key="index"
             :title="
               getDisplayValue(item[col.fieldName], col.dataType, col.enumName)
@@ -38,7 +46,7 @@
         </tr>
       </tbody>
     </table>
-    <Paging :customData="paging" @clickPageNum="clickPageNum" ref="Paging"/>
+    <Paging :customData="paging" @clickPageNum="clickPageNum" @changePageSize="changePageSize" ref="Paging" />
   </div>
 </template>
 
@@ -63,6 +71,7 @@ export default {
         pageSize: this.customData.pageSize,
         sumRecord: this.customData.sumRecord,
         sumPageNum: this.customData.sumPageNum,
+        maxPageNumDispaly: this.customData.maxPageNumDisplay
       },
     };
   },
@@ -73,11 +82,11 @@ export default {
         this.paging.pageSize = val.pageSize;
         this.paging.sumRecord = val.sumRecord;
         this.paging.sumPageNum = val.sumPageNum;
-      }
+        this.paging.maxPageNumDisplay = val.maxPageNumDisplay;
+      },
     },
   },
   methods: {
-
     /**
      * Hàm xử lý hover chuột vào row
      * NVTOAN 13/06/2021
@@ -148,7 +157,7 @@ export default {
      * NVTOAN 20/06/2021
      */
     clickPageNum(index) {
-      this.$emit('clickPageNum', index);
+      this.$emit("clickPageNum", index);
     },
 
     /**
@@ -224,33 +233,12 @@ export default {
     },
 
     /**
-     * Hàm filter data
-     * NVTOAN 18/06/2021
+     * Hàm gọi cha thay đổi page size
+     * NVTOAN 23/06/2021
      */
-    // async filterData(filterValue) {
-    //   if (filterValue) {
-    //     await this.axios
-    //       .get(
-    //         "http://cukcuk.manhnv.net/v1/Employees/Filter?pageSize=" +
-    //           10 +
-    //           "&pageNumber=" +
-    //           2 +
-    //           "&fullName=" +
-    //           filterValue
-    //       )
-    //       .then((response) => {
-
-    //         if (!this.gridData) {
-    //           this.$bus.emit("toast", {
-    //             toastType: "warning",
-    //             toastMessage: "Không có dữ liệu hợp lệ",
-    //           });
-    //         }
-    //       });
-    //   } else {
-    //     this.getDataServer();
-    //   }
-    // },
+    changePageSize(number) {
+      this.$emit('changePageSize', number);
+    }
   },
 };
 </script>
