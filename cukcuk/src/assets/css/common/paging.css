@@ -7,6 +7,16 @@
     font-size: 14px;
 }
 
+.paging__left {
+    flex: 1;
+}
+
+.paging__right {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+}
+
 .paging-item{
     width: 40px;
     height: 40px;
