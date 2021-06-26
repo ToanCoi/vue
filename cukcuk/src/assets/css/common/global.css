@@ -169,6 +169,21 @@ a {
     transition: .2s;
 }
 
+.dx-calendar-navigator-next-month.dx-button .dx-icon, .dx-calendar-navigator-next-view.dx-button .dx-icon {
+    color: #019160;
+}
+
+.dx-calendar-navigator-previous-month.dx-button .dx-icon, .dx-calendar-navigator-previous-view.dx-button .dx-icon {
+    color: #019160;
+}
+
+.dx-calendar-navigator .dx-calendar-caption-button.dx-button .dx-button-content {
+    color: #019160;
+}
+
+.dx-calendar-cell.dx-calendar-selected-date.dx-calendar-contoured-date, .dx-calendar-cell.dx-calendar-selected-date.dx-calendar-today.dx-calendar-contoured-date {
+    box-shadow:  0 0 0 1px #bebebe, inset 0 0 0 1000px #019160;
+}
 /* date box */
 
 .dx-show-invalid-badge.dx-datebox.dx-textbox.dx-texteditor.dx-dropdowneditor-button-visible.dx-editor-outlined.dx-texteditor-empty.dx-widget.dx-visibility-change-handler.dx-dropdowneditor.dx-datebox-date.dx-datebox-calendar {
