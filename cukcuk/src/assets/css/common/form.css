@@ -9,7 +9,8 @@ form {
     align-items: center;
     justify-content: center;
     z-index: 3;
-    overflow: auto;
+    height: 100vh;
+    /* overflow: auto; */
 }
 
 .form {
@@ -17,8 +18,9 @@ form {
     z-index: 4;
     background-color: #fff;
     width: fit-content;
-    overflow: auto;
-    max-height: 100vh;
+    /* overflow: auto; */
+    height: fit-content;
+    border-radius: 4px;
 }
 
 .form__title {
@@ -26,11 +28,12 @@ form {
     justify-content: space-between;
     align-items: center;
     margin-left: 16px;
-    position: -webkit-sticky;
-    position: sticky;
+    /* position: -webkit-sticky;
+    position: sticky; */
     top: 0;
     background-color: #fff;
     z-index: 5;
+    border-radius: 4px;
 }
 
 .form__title-text {
@@ -55,6 +58,8 @@ form {
 
 .form__content {
     margin: 16px 0px 0px 16px;
+    height: 500px;
+    overflow: auto;
 }
 
 .form__group {
@@ -108,10 +113,11 @@ form {
     justify-content: flex-end;
     padding-right: 16px;
     height: 60px;
-    position: -webkit-sticky;
-    position: sticky;
+    /* position: -webkit-sticky;
+    position: sticky; */
     bottom: 0;
     z-index: 5;
+    border-radius: 4px;
 }
 
 .form__btn {
@@ -121,5 +127,9 @@ form {
 @media only screen and (min-height: 893px) {
     form {
         bottom: 0;
+    }
+
+    .form__content {
+        height: fit-content;
     }
 }
